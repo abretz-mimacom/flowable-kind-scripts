@@ -15,13 +15,13 @@ if ! command -v kind >/dev/null 2>&1; then
   echo "kind not found, installing..."
   if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew not found, installing..."
-    source <(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)
-    echo >> /home/codespace/.bashrc
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/codespace/.bashrc
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    # echo >> /home/codespace/.bashrc
+    # echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/codespace/.bashrc
+    # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
   brew install kind derailed/k9s/k9s
-  source /home/codespace/.bashrc
+  # source /home/codespace/.bashrc
 fi
 
 # 2. Create kind cluster with containerd registry config dir enabled
