@@ -10,15 +10,15 @@ ENGAGE_POD=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":m
 if [ -z "$ENGAGE_POD" ]; then
     echo "No pod containing 'engage' found in namespace $NAMESPACE"
 else
-    echo "Port-forwarding $ENGAGE_POD 8080 -> 8080-local"
-    kubectl port-forward -n "$NAMESPACE" pod/"$ENGAGE_POD" 8080:8080-local &
+    echo "Port-forwarding $ENGAGE_POD 8080 -> 8080 (local)"
+    kubectl port-forward -n "$NAMESPACE" pod/"$ENGAGE_POD" 8080:8080 &
 fi
 
 # Find a pod containing "design"
 DESIGN_POD=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":metadata.name" | grep design | head -n1)
 if [ -n "$DESIGN_POD" ]; then
-    echo "Port-forwarding $DESIGN_POD 8080 -> 8081-local"
-    kubectl port-forward -n "$NAMESPACE" pod/"$DESIGN_POD" 8080:8081-local &
+    echo "Port-forwarding $DESIGN_POD 8080 -> 8081 (local)"
+    kubectl port-forward -n "$NAMESPACE" pod/"$DESIGN_POD" 8080:8081 &
 else
     echo "No pod containing 'design' found in namespace $NAMESPACE"
 fi
@@ -28,8 +28,8 @@ CONTROL_POD=$(kubectl get pods -n "$NAMESPACE" --no-headers -o custom-columns=":
 if [ -z "$CONTROL_POD" ]; then
     echo "No pod containing 'control' found in namespace $NAMESPACE"
 else
-    echo "Port-forwarding $CONTROL_POD 8080 -> 8082-local"
-    kubectl port-forward -n "$NAMESPACE" pod/"$CONTROL_POD" 8080:8082-local &
+    echo "Port-forwarding $CONTROL_POD 8080 -> 8082 (local)"
+    kubectl port-forward -n "$NAMESPACE" pod/"$CONTROL_POD" 8080:8082 &
 fi
 
 wait
