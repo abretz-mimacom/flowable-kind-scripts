@@ -20,6 +20,7 @@ helm upgrade --install actions-runner-controller \
 
 
 echo "Creating GitHub Actions Runner Controller secret"
+kubectl delete secret controller-manager -n actions-runner-system --ignore-not-found
 kubectl -n actions-runner-system create secret generic controller-manager \
   --from-literal=github_token="${GITHUB_TOKEN}"
 
