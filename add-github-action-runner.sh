@@ -14,7 +14,7 @@ helm install actions-runner-controller actions-runner-controller/actions-runner-
 
 INSTALLATION_NAME="arc-runner-set"
 NAMESPACE="arc-runners"
-GITHUB_CONFIG_URL="https://github.com/<your_enterprise/org/repo>"
+GITHUB_CONFIG_URL="https://github.com/<your_enterprise/org/repo"
 GITHUB_PAT="$GITHUB_TOKEN"
 
 helm install "${INSTALLATION_NAME}" \
