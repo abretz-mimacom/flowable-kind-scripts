@@ -8,13 +8,14 @@ helm install \
   --create-namespace \
   --set crds.enabled=true
 
+NAMESPACE="arc-runners"
+
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 helm repo update
-helm install actions-runner-controller actions-runner-controller/actions-runner-controller --namespace actions-runner-system --create-namespace
+helm install actions-runner-controller actions-runner-controller/actions-runner-controller --namespace "$NAMESPACE" --create-namespace
 
 INSTALLATION_NAME="arc-runner-set"
-NAMESPACE="arc-runners"
-GITHUB_CONFIG_URL="https://github.com/<your_enterprise/org/repo"
+GITHUB_CONFIG_URL="https://github.com/abretz-mimacom/flowable-deploy-template"
 GITHUB_PAT="$GITHUB_TOKEN"
 
 helm install "${INSTALLATION_NAME}" \
