@@ -25,8 +25,8 @@ helm repo update
 helm upgrade --install actions-runner-controller \
   actions-runner-controller/actions-runner-controller \
   --namespace actions-runner-system
-  # --set authSecret.create=true \
-  # --set authSecret.github_token="${GITHUB_TOKEN}"
+  --set authSecret.create=true \
+  --set authSecret.github_token="${GITHUB_TOKEN}"
 
 # ARC controller + webhook
 kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
