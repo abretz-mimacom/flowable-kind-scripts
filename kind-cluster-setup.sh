@@ -16,8 +16,10 @@ if ! command -v kind >/dev/null 2>&1; then
   if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew not found, installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo >> /home/codespace/.bashrc
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/codespace/.bashrc
+    # echo >> /home/codespace/.bashrc
+    echo >> /home/codespace/.zshrc
+    # echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/codespace/.bashrc
+    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/codespace/.zshrc
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
   brew install kind derailed/k9s/k9s
