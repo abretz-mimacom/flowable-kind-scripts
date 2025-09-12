@@ -18,7 +18,7 @@ if ! command -v kind >/dev/null 2>&1; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
-  brew install kind
+  brew install kind derailed/k9s/k9s
 fi
 
 # 2. Create kind cluster with containerd registry config dir enabled
