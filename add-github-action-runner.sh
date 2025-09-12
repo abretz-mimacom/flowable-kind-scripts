@@ -24,7 +24,7 @@ helm repo update
 # Let Helm create the secret & own it; pass the token via values
 helm upgrade --install actions-runner-controller \
   actions-runner-controller/actions-runner-controller \
-  --namespace actions-runner-system
+  --namespace actions-runner-system \
   --set authSecret.create=true \
   --set authSecret.github_token="${GITHUB_TOKEN}"
 
