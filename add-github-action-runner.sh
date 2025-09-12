@@ -14,7 +14,7 @@ NAMESPACE="arc-runners"
 echo "Setting up GitHub Actions Runner Controller in Kubernetes"
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 helm repo update
-helm install gha-rs-controller actions-runner-controller/actions-runner-controller --namespace "$NAMESPACE" --create-namespace
+helm install gha-rs-controller actions-runner-controller/actions-runner-controller --namespace "$NAMESPACE" --create-namespace --set webhook.autoGenerateCert=true
 
 INSTALLATION_NAME="arc-runner-set"
 GITHUB_CONFIG_URL="https://github.com/abretz-mimacom/flowable-deploy-template"
@@ -26,4 +26,5 @@ helm install "${INSTALLATION_NAME}" \
     --create-namespace \
     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
+    --set controllerServiceAccount.name="gha-rs-controller
     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
