@@ -10,6 +10,14 @@ helm install \
   --set crds.enabled=true
 
 NAMESPACE="arc-runners"
+helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
+helm repo update
+helm upgrade --install actions-runner-controller \
+  actions-runner-controller/actions-runner-controller \
+  --namespace actions-runner-system \
+  --set authSecret.create=true \
+  --set webhookPort=9443
+
 
 echo "Creating GitHub Actions Runner Controller secret"
 kubectl -n actions-runner-system create secret generic controller-manager \
