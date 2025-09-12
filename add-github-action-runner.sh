@@ -1,6 +1,12 @@
 #!/bin/bash
 set -o errexit
 
+helm install \
+  cert-manager oci://quay.io/jetstack/charts/cert-manager \
+  --version v1.18.2 \
+  --namespace cert-manager \
+  --create-namespace \
+  --set crds.enabled=true
 
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 helm repo update
