@@ -10,6 +10,17 @@ if [ "$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true
     registry:2
 fi
 
+# Check if kind is installed, install with brew if not
+if ! command -v kind >/dev/null 2>&1; then
+  echo "kind not found, installing..."
+  if ! command -v brew >/dev/null 2>&1; then
+    echo "Homebrew not found, installing..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  fi
+  brew install kind
+fi
+
 # 2. Create kind cluster with containerd registry config dir enabled
 #
 # NOTE: the containerd config patch is not necessary with images from kind v0.27.0+
