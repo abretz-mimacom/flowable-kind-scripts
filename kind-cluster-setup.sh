@@ -1,6 +1,7 @@
 #!/bin/bash
 set -o errexit
 
+CLUSTER_NAME="${1:-kind}"
 # 1. Create registry container unless it already exists
 reg_name='kind-registry'
 reg_port='5001'
@@ -35,9 +36,9 @@ fi
 cat <<EOF | kind create cluster --config=-
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
+name: "${CLUSTER_NAME}"
 nodes:
   - role: control-plane
-  - role: worker
   - role: worker
   - role: worker
 containerdConfigPatches:
