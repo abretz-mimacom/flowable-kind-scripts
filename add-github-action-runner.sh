@@ -9,23 +9,28 @@ helm install \
   --create-namespace \
   --set crds.enabled=true
 
-NAMESPACE="arc-runners"
+# Wait for cert-manager (optional but wise)
+kubectl -n cert-manager rollout status deploy/cert-manager --timeout=120s
+kubectl -n cert-manager rollout status deploy/cert-manager-webhook --timeout=120s
+kubectl -n cert-manager rollout status deploy/cert-manager-cainjector --timeout=120s
+
+# Namespaces
+kubectl get ns actions-runner-system >/dev/null 2>&1 || kubectl create ns actions-runner-system
+kubectl get ns arc-runners >/dev/null 2>&1 || kubectl create ns arc-runners
+
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 helm repo update
+
+# Let Helm create the secret & own it; pass the token via values
 helm upgrade --install actions-runner-controller \
   actions-runner-controller/actions-runner-controller \
   --namespace actions-runner-system \
   --set authSecret.create=true \
+  --set-string authSecret.github_token="${GITHUB_TOKEN}" \
   --set webhookPort=9443
 
-
-echo "Creating GitHub Actions Runner Controller secret"
-kubectl delete secret controller-manager -n actions-runner-system --ignore-not-found
-kubectl -n actions-runner-system create secret generic controller-manager \
-  --from-literal=github_token="${GITHUB_TOKEN}"
-
-echo "Applying GitHub Actions Runner Controller in Kubernetes"
-cat <<'EOF' | kubectl apply -f -
+echo "Applying GitHub Actions RunnerDeployment"
+cat <<EOF | kubectl apply -f -
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
@@ -36,21 +41,10 @@ spec:
   template:
     spec:
       repository: "${GITHUB_REPOSITORY}"
-      dockerdWithinRunnerContainer: true  
+      dockerdWithinRunnerContainer: true
       labels:
         - kind
         - codespaces
 EOF
 
-# INSTALLATION_NAME="arc-runner-set"
-# GITHUB_CONFIG_URL="https://github.com/abretz-mimacom/flowable-deploy-template"
-# GITHUB_PAT="$GITHUB_TOKEN"
-
-# echo "Setting up GitHub Actions Runners scaleset in Kubernetes"
-# helm install "${INSTALLATION_NAME}" \
-#     --namespace "${NAMESPACE}" \
-#     --create-namespace \
-#     --set githubConfigUrl="${GITHUB_CONFIG_URL}" \
-#     --set githubConfigSecret.github_token="${GITHUB_PAT}" \
-#     --set controllerServiceAccount.name="gha-rs-controller" \
-#     oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set
+kubectl -n arc-runners get pods -o wide
