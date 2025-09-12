@@ -2,7 +2,7 @@
 set -o errexit
 
 echo "Setting up Cert Manager in Kubernetes"
-helm install \
+helm upgrade --install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
   --version v1.18.2 \
   --namespace cert-manager \
@@ -26,8 +26,12 @@ helm upgrade --install actions-runner-controller \
   actions-runner-controller/actions-runner-controller \
   --namespace actions-runner-system \
   --set authSecret.create=true \
-  --set-string authSecret.github_token="${GITHUB_TOKEN}" \
-  --set webhookPort=9443
+  --set-string authSecret.github_token="${GITHUB_TOKEN}"
+
+# ARC controller + webhook
+kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
+kubectl -n actions-runner-system rollout status deploy/actions-runner-controller-webhook --timeout=180s
+
 
 echo "Applying GitHub Actions RunnerDeployment"
 cat <<EOF | kubectl apply -f -
