@@ -9,15 +9,12 @@ helm install \
   --create-namespace \
   --set crds.enabled=true
 
-NAMESPACE="actions-runner-system"
+NAMESPACE="arc-runners"
 
 echo "Setting up GitHub Actions Runner Controller in Kubernetes"
-# helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
-# helm repo update
-# helm install actions-runner-controller actions-runner-controller/actions-runner-controller --namespace "$NAMESPACE" --create-namespace
-helm upgrade --install gha-rs-controller oci://ghcr.io/actions/actions-runner-controller-charts/gha-rs-controller \
-  --namespace "NAMESPACE" --create-namespace
-
+helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
+helm repo update
+helm install gha-rs-controller actions-runner-controller/actions-runner-controller --namespace "$NAMESPACE" --create-namespace
 
 INSTALLATION_NAME="arc-runner-set"
 GITHUB_CONFIG_URL="https://github.com/abretz-mimacom/flowable-deploy-template"
