@@ -31,8 +31,8 @@ helm upgrade --install actions-runner-controller \
 # ARC controller + webhook
 kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
 
-echo "Waiting for ARC controller webhood service to be ready"
-sleep 10
+echo "Waiting for ARC controller webhook service to be ready"
+sleep 15
 
 
 echo "Applying GitHub Actions RunnerDeployment"
