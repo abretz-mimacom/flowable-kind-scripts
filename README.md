@@ -1,2 +1,6 @@
 # flowable-kind-scripts
-Shell scripts to quickly standup a Kind cluster for the purposes of trialing Flowable
+
+1) create a 4 node kind cluster
+`% scripts/kind-cluster-setup.sh`
+2) deploy flowable
+`% scripts/deploy-flowable-platform.sh dev`
