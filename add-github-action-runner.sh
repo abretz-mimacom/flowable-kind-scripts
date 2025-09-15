@@ -67,6 +67,8 @@ rules:
       - jobs
       - cronjobs
       - ingresses
+      - pods
+      - nodes
     verbs: ["get","list","watch","create","update","patch","delete"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
