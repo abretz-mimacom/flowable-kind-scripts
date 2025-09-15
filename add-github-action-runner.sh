@@ -59,7 +59,7 @@ kind: ClusterRole
 metadata:
   name: gh-runner-read-cluster
 rules:
-  - apiGroups: [""]
+  - apiGroups: ["", "apps", "ci"]
     resources: ["pods", "configmaps", "secrets", "services", "deployments", "replicasets", "namespaces", "statefulsets", "daemonsets", "jobs", "cronjobs", "ingresses", "networkpolicies", "pods", "pods/log", "pods/exec", "serviceaccounts", "persistentvolumeclaims"]
     verbs: ["get","list","watch","create","update","patch","delete"]
   - apiGroups: ["networking.k8s.io"]
