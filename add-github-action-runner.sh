@@ -37,39 +37,86 @@ sleep 15
 
 echo "Applying GitHub Actions RunnerDeployment"
 cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ci
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gh-runner
+  namespace: ci
+automountServiceAccountToken: true
+---
+# Example: allow manage typical deploy resources in a target namespace (e.g., "apps")
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: deployer
+  namespace: apps
+rules:
+  - apiGroups: ["", "apps", "batch", "networking.k8s.io"]
+    resources:
+      - configmaps
+      - secrets
+      - services
+      - deployments
+      - statefulsets
+      - daemonsets
+      - jobs
+      - cronjobs
+      - ingresses
+    verbs: ["get","list","watch","create","update","patch","delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: gh-runner-deployer
+  namespace: apps
+subjects:
+  - kind: ServiceAccount
+    name: gh-runner
+    namespace: ci
+roleRef:
+  kind: Role
+  name: deployer
+  apiGroup: rbac.authorization.k8s.io
+---
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
 metadata:
   name: repo-runner
-  namespace: actions-runner-system
+  namespace: ci
 spec:
   replicas: 1
   template:
     spec:
       repository: "${GITHUB_REPOSITORY}"
       labels: [self-hosted, kind, arc]
+      serviceAccountName: gh-runner
       # Enable Docker and the DinD sidecar
-      dockerEnabled: true
-      dockerDindEnabled: true
+      # dockerEnabled: true
+      # dockerDindEnabled: true
 
-      # These help DinD come up cleanly in k8s
-      securityContext:
-        privileged: true               # REQUIRED for dockerd
-        runAsUser: 0                   # dockerd needs root
+      # # These help DinD come up cleanly in k8s
+      # securityContext:
+      #   privileged: true               # REQUIRED for dockerd
+      #   runAsUser: 0                   # dockerd needs root
 
-      # Provide storage for DinD (so layers don’t vanish mid-job)
-      volumes:
-        - name: dind-storage
-          emptyDir: {}
-      volumeMounts:
-        - name: dind-storage
-          mountPath: /var/lib/docker
+      # # Provide storage for DinD (so layers don’t vanish mid-job)
+      # volumes:
+      #   - name: dind-storage
+      #     emptyDir: {}
+      # volumeMounts:
+      #   - name: dind-storage
+      #     mountPath: /var/lib/docker
 
-      # Make sure TLS is off for DinD (so DOCKER_HOST=unix:///var/run/docker.sock works)
-      dind:
-        env:
-          - name: DOCKER_TLS_CERTDIR
-            value: ""
+      # # Make sure TLS is off for DinD (so DOCKER_HOST=unix:///var/run/docker.sock works)
+      # dind:
+      #   env:
+      #     - name: DOCKER_TLS_CERTDIR
+      #       value: ""
 EOF
 
 kubectl -n actions-runner-system get pods -o wide
