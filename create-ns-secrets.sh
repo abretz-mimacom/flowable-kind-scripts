@@ -5,6 +5,9 @@ set -o errexit
 RELEASE_NAME="${2:-flowable}"
 DEFAULT_LICENSE_FILE_PATH="$HOME/.flowable/flowable.license"
 LICENSE_FILE_PATH="${3:-$DEFAULT_LICENSE_FILE_PATH}"
+PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
+PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+echo "Project directory is: $PROJECT_DIR"
 
 
 # Check for required argument (namespace)
@@ -21,7 +24,7 @@ if kubectl get namespace "$DEPLOYMENT_NAMESPACE" >/dev/null 2>&1; then
   echo "Namespace $DEPLOYMENT_NAMESPACE exists. Will not attempt to create it."
 else
   echo "Namespace $DEPLOYMENT_NAMESPACE does not exist. Creating it now."
-  source "$CODESPACE_VSCODE_FOLDER/scripts/create-ns.sh" "$DEPLOYMENT_NAMESPACE"
+  source "$PROJECT_DIR/scripts/create-ns.sh" "$DEPLOYMENT_NAMESPACE"
 fi
 
 # Check for FLOWABLE_LICENSE_KEY - raw text value (recommended ONLY putting in the Codespace secret environment variable)
@@ -54,7 +57,7 @@ fi
 
 echo "Attempting to delete existing secrets to avoid 'AlreadyExists' errors"
 
-source "$CODESPACE_VSCODE_FOLDER/scripts/delete-ns-secrets.sh" "$DEPLOYMENT_NAMESPACE" "$RELEASE_NAME"
+source "$PROJECT_DIR/scripts/delete-ns-secrets.sh" "$DEPLOYMENT_NAMESPACE" "$RELEASE_NAME"
 
 echo "Creating secrets in namespace: $DEPLOYMENT_NAMESPACE"
 
