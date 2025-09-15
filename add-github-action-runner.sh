@@ -53,4 +53,4 @@ spec:
         - codespaces
 EOF
 
-kubectl -n arc-runners get pods -o wide
+kubectl -n actions-runner-system get pods -o wide
