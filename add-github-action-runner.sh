@@ -47,7 +47,7 @@ spec:
   template:
     spec:
       repository: "${GITHUB_REPOSITORY}"
-      dockerdWithinRunnerContainer: true
+      # dockerdWithinRunnerContainer: true
       labels:
         - kind
         - codespaces
