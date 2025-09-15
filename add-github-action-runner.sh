@@ -90,7 +90,7 @@ spec:
     spec:
       repository: "${GITHUB_REPOSITORY}"
       labels: [self-hosted, kind, arc]
-      serviceAccountName: gh-runner-read-cluster
+      serviceAccountName: gh-runner
       # Enable Docker and the DinD sidecar
       # dockerEnabled: true
       # dockerDindEnabled: true
