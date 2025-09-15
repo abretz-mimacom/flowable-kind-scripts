@@ -40,6 +40,11 @@ cat <<EOF | kubectl apply -f -
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: apps
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: ci
 ---
 apiVersion: v1
