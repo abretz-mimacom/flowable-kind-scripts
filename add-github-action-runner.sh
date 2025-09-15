@@ -47,10 +47,29 @@ spec:
   template:
     spec:
       repository: "${GITHUB_REPOSITORY}"
-      # dockerdWithinRunnerContainer: true
-      labels:
-        - kind
-        - codespaces
+      labels: [self-hosted, kind, arc]
+      # Enable Docker and the DinD sidecar
+      dockerEnabled: true
+      dockerDindEnabled: true
+
+      # These help DinD come up cleanly in k8s
+      securityContext:
+        privileged: true               # REQUIRED for dockerd
+        runAsUser: 0                   # dockerd needs root
+
+      # Provide storage for DinD (so layers don’t vanish mid-job)
+      volumes:
+        - name: dind-storage
+          emptyDir: {}
+      volumeMounts:
+        - name: dind-storage
+          mountPath: /var/lib/docker
+
+      # Make sure TLS is off for DinD (so DOCKER_HOST=unix:///var/run/docker.sock works)
+      dind:
+        env:
+          - name: DOCKER_TLS_CERTDIR
+            value: ""
 EOF
 
 kubectl -n actions-runner-system get pods -o wide
