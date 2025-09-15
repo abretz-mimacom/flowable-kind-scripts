@@ -60,8 +60,8 @@ metadata:
   name: gh-runner-read-cluster
 rules:
   - apiGroups: [""]
-    resources: ["pods"]
-    verbs: ["get","list","watch"]
+    resources: ["pods", "configmaps", "secrets", "services", "deployments", "replicasets", "namespaces", "statefulsets", "daemonsets", "jobs", "cronjobs", "ingresses", "pods", "pods/log", "pods/exec"]
+    verbs: ["get","list","watch","create","update","patch","delete"]
   - apiGroups: [""]
     resources: ["nodes"]
     verbs: ["get","list","watch"]
