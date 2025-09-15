@@ -54,41 +54,30 @@ metadata:
   namespace: ci
 automountServiceAccountToken: true
 ---
-# Example: allow manage typical deploy resources in a target namespace (e.g., "apps")
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: deployer
-  namespace: apps
+  name: gh-runner-read-cluster
 rules:
-  - apiGroups: ["", "apps", "batch", "networking.k8s.io"]
-    resources:
-      - configmaps
-      - secrets
-      - services
-      - deployments
-      - statefulsets
-      - daemonsets
-      - jobs
-      - cronjobs
-      - ingresses
-      - pods
-      - nodes
-    verbs: ["get","list","watch","create","update","patch","delete"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get","list","watch"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get","list","watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: gh-runner-deployer
-  namespace: apps
+  name: gh-runner-read-cluster
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: gh-runner-read-cluster
 subjects:
   - kind: ServiceAccount
     name: gh-runner
     namespace: ci
-roleRef:
-  kind: Role
-  name: deployer
-  apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: actions.summerwind.dev/v1alpha1
 kind: RunnerDeployment
@@ -101,7 +90,7 @@ spec:
     spec:
       repository: "${GITHUB_REPOSITORY}"
       labels: [self-hosted, kind, arc]
-      serviceAccountName: gh-runner
+      serviceAccountName: gh-runner-read-cluster
       # Enable Docker and the DinD sidecar
       # dockerEnabled: true
       # dockerDindEnabled: true
