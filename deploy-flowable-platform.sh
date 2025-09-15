@@ -20,12 +20,16 @@ if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
     exit 1
 fi
 
+PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
+PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+echo "Project directory is: $PROJECT_DIR"
+
 # Check if namespace exists, if not create it
 if kubectl get namespace "$NAMESPACE" >/dev/null 2>&1; then
   echo "Namespace $NAMESPACE exists. Will not attempt to create it."
 else
   echo "Namespace $NAMESPACE does not exist. Creating it now."
-  source "$CODESPACE_VSCODE_FOLDER/scripts/create-ns-secrets.sh" "$NAMESPACE" "$RELEASE_NAME"
+  source "$PROJECT_DIR/scripts/create-ns-secrets.sh" "$NAMESPACE" "$RELEASE_NAME"
 fi
 
 # Add the Flowable Helm repo
@@ -35,10 +39,10 @@ helm repo add flowable https://repo.flowable.com/flowable-helm \
 
 helm repo update
 
-helm dependency build "$CODESPACE_VSCODE_FOLDER/helm/"
+helm dependency build "$PROJECT_DIR/helm/"
 
 # Install or upgrade the Flowable platform chart from local ./helm directory
-helm upgrade --install "$RELEASE_NAME" "$CODESPACE_VSCODE_FOLDER/helm/" -f "$CODESPACE_VSCODE_FOLDER/helm/$NAMESPACE/values.yaml" \
+helm upgrade --install "$RELEASE_NAME" "$PROJECT_DIR/helm/" -f "$PROJECT_DIR/helm/$NAMESPACE/values.yaml" \
     --namespace "$NAMESPACE" \
     --create-namespace
 
