@@ -2,6 +2,10 @@
 set -o errexit
 
 CLUSTER_NAME="${1:-kind}"
+
+PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
+PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+
 # 1. Create registry container unless it already exists
 reg_name='kind-registry'
 reg_port='5001'
@@ -83,3 +87,6 @@ data:
     host: "localhost:${reg_port}"
     help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
 EOF
+
+# 6. Add github action runner
+"$PROJECT_DIR/scripts/add-github-action-runner.sh" "$CLUSTER_NAME"
