@@ -1,6 +1,8 @@
 #!/bin/bash
 set -o errexit
 
+CLUSTER_NAME="${1:-kind}"
+
 echo "Setting up Cert Manager in Kubernetes"
 helm upgrade --install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
@@ -95,7 +97,7 @@ spec:
   template:
     spec:
       repository: "${GITHUB_REPOSITORY}"
-      labels: [self-hosted, kind, arc]
+      labels: [self-hosted, kind, arc, "${CLUSTER_NAME}"]
       serviceAccountName: gh-runner
       # Enable Docker and the DinD sidecar
       # dockerEnabled: true
