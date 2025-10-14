@@ -90,7 +90,7 @@ data:
 EOF
 
 # 6. Add ingress controller
-helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --set controller.service.type=ClusterIP --namespace ingress-nginx --create-namespace
 
 # 7. Add github action runner
 if [ -z DISABLE_ARC ];
