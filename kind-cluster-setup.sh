@@ -5,6 +5,7 @@ CLUSTER_NAME="${1:-kind}"
 
 PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
 PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+DISABLE_ARC="${2:-false}"
 
 # 1. Create registry container unless it already exists
 reg_name='kind-registry'
@@ -92,4 +93,6 @@ EOF
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 
 # 7. Add github action runner
-"$PROJECT_DIR/scripts/add-github-action-runner.sh" "$CLUSTER_NAME"
+if [ -z DISABLE_ARC ];
+  "$PROJECT_DIR/scripts/add-github-action-runner.sh" "$CLUSTER_NAME"
+fi
