@@ -88,5 +88,8 @@ data:
     help: "https://kind.sigs.k8s.io/docs/user/local-registry/"
 EOF
 
-# 6. Add github action runner
+# 6. Add ingress controller
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+
+# 7. Add github action runner
 "$PROJECT_DIR/scripts/add-github-action-runner.sh" "$CLUSTER_NAME"
