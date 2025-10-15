@@ -6,6 +6,7 @@ CLUSTER_NAME="${1:-kind}"
 PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
 PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
 DISABLE_ARC="${2:-false}"
+SINGLE_CLUSTER="${3:-false}"
 
 # 1. Create registry container unless it already exists
 reg_name='kind-registry'
@@ -38,21 +39,35 @@ fi
 # https://github.com/kubernetes-sigs/kind/issues/2875
 # https://github.com/containerd/containerd/blob/main/docs/cri/config.md#registry-configuration
 # See: https://github.com/containerd/containerd/blob/main/docs/hosts.md
-echo "Creating kind cluster ${CLUSTER_NAME}..."
-cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-name: "${CLUSTER_NAME}"
-nodes:
-  - role: control-plane
-  - role: worker
-  - role: worker
-containerdConfigPatches:
-- |-
-  [plugins."io.containerd.grpc.v1.cri".registry]
-    config_path = "/etc/containerd/certs.d"
-EOF
+if [ -z $SINGLE_CLUSTER ]; then
+  echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
+  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
+  kind: Cluster
+  apiVersion: kind.x-k8s.io/v1alpha4
+  name: "${CLUSTER_NAME}"
+  nodes:
+    - role: control-plane
+    - role: worker
+    - role: worker
+  containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      config_path = "/etc/containerd/certs.d"
+  EOF
+fi
 
+if [ $SINGLE_CLUSTER ]; then
+  echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
+  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
+  kind: Cluster
+  apiVersion: kind.x-k8s.io/v1alpha4
+  name: "${CLUSTER_NAME}"
+  containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry]
+      config_path = "/etc/containerd/certs.d"
+  EOF
+fi
 # 3. Add the registry config to the nodes
 #
 # This is necessary because localhost resolves to loopback addresses that are
