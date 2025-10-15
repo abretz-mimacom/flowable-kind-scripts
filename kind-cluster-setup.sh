@@ -58,7 +58,7 @@ fi
 
 if [ $SINGLE_CLUSTER ]; then
   echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
-  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
+  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --network host --config=-
   kind: Cluster
   apiVersion: kind.x-k8s.io/v1alpha4
   name: "${CLUSTER_NAME}"
