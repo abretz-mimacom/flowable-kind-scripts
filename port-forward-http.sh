@@ -11,7 +11,7 @@ if [ -z "$INGRESS_CONTROLLER" ]; then
     echo "No pod containing 'ingress' found in namespace $NAMESPACE"
 else
     echo "Port-forwarding $INGRESS_CONTROLLER 80 -> 8090 (local)"
-    kubectl port-forward -n "$NAMESPACE" pod/"$INGRESS_CONTROLLER" 80:8090 &
+    kubectl port-forward -n "$NAMESPACE" pod/"$INGRESS_CONTROLLER" 8090:80 &
 fi
 
 # Find a pod containing "engage"
