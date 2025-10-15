@@ -53,7 +53,7 @@ if [ -z $SINGLE_CLUSTER ]; then
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
-  EOF
+EOF
 fi
 
 if [ $SINGLE_CLUSTER ]; then
@@ -66,7 +66,7 @@ if [ $SINGLE_CLUSTER ]; then
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
-  EOF
+EOF
 fi
 # 3. Add the registry config to the nodes
 #
