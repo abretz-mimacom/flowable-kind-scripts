@@ -69,6 +69,10 @@ if [ $SINGLE_CLUSTER ]; then
         hostPort: 3011
         listenAddress: 0.0.0.0
         protocol: TCP
+      - containerPort: 8091
+        hostPort: 8091
+        listenAddress: 0.0.0.0
+        protocol: TCP
   containerdConfigPatches:
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
