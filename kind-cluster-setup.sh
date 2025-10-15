@@ -115,6 +115,6 @@ EOF
 helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --set controller.service.type=ClusterIP --namespace ingress-nginx --create-namespace
 
 # 7. Add github action runner
-if [ -z DISABLE_ARC ];
+if [ -z DISABLE_ARC ]; then
   "$PROJECT_DIR/scripts/add-github-action-runner.sh" "$CLUSTER_NAME"
 fi
