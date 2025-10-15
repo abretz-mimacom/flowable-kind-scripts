@@ -58,10 +58,16 @@ fi
 
 if [ $SINGLE_CLUSTER ]; then
   echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
-  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --network host --config=-
+  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
   kind: Cluster
   apiVersion: kind.x-k8s.io/v1alpha4
   name: "${CLUSTER_NAME}"
+  name: "${CLUSTER_NAME}"
+  extraPortMappings:
+  - containerPort: 3011
+    hostPort: 3011
+    listenAddress: 0.0.0.0
+    protocol: TCP
   containerdConfigPatches:
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
