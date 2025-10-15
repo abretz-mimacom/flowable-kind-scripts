@@ -63,7 +63,7 @@ if [ $SINGLE_CLUSTER ]; then
   apiVersion: kind.x-k8s.io/v1alpha4
   name: "${CLUSTER_NAME}"
   nodes:
-    - role: control-plane
+  - role: control-plane
     extraPortMappings:
       - containerPort: 3011
         hostPort: 3011
