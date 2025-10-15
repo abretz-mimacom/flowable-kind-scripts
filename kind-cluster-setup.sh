@@ -69,8 +69,8 @@ if [ $SINGLE_CLUSTER ]; then
         hostPort: 3011
         listenAddress: 0.0.0.0
         protocol: TCP
-      - containerPort: 8091
-        hostPort: 8091
+      - containerPort: 30001
+        hostPort: 8081
         listenAddress: 0.0.0.0
         protocol: TCP
   containerdConfigPatches:
