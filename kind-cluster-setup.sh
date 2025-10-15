@@ -63,10 +63,10 @@ if [ $SINGLE_CLUSTER ]; then
   apiVersion: kind.x-k8s.io/v1alpha4
   name: "${CLUSTER_NAME}"
   extraPortMappings:
-  - containerPort: 3011
-    hostPort: 3011
-    listenAddress: 0.0.0.0
-    protocol: TCP
+    - containerPort: 3011
+      hostPort: 3011
+      listenAddress: 0.0.0.0
+      protocol: TCP
   containerdConfigPatches:
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
