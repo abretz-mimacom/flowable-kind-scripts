@@ -14,6 +14,10 @@ NAMESPACE="$1"
 RELEASE_NAME="${2:-flowable}"
 
 
+# @Copilot, please change this check&exit below to check for the existence of the below secret env vars. If one of them doesn't exist, please prompt for user input, then store those as Codespace secrets.
+# - FLOWABLE_REPO_USER 
+# - FLOWABLE_REPO_PASS
+# - FLOWABLE_LICENSE_KEY
 # Ensure required environment variables are set
 if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
     echo "Please set FLOWABLE_REPO_USER and FLOWABLE_REPO_PASSWORD environment variables."
