@@ -73,9 +73,9 @@ echo
 echo
 echo 
 echo "Adding env secrets to .bashrc"
-echo $FLOWABLE_REPO_USER >> ~/.bashrc
-echo $FLOWABLE_REPO_PASSWORD >> ~/.bashrc
-echo $FLOWABLE_LICENSE_KEY >> ~/.bashrc
+echo "export $FLOWABLE_REPO_USER" >> ~/.bashrc
+echo "export $FLOWABLE_REPO_PASSWORD" >> ~/.bashrc
+echo "export $FLOWABLE_LICENSE_KEY" >> ~/.bashrc
 
 
 
