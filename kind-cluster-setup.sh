@@ -28,7 +28,7 @@ if ! command -v kind >/dev/null 2>&1; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
   brew install kind derailed/k9s/k9s
-  /bin/bash -c ["echo", "\n \n \n Installed kind and k9s. Opening new bash shell to continue execution from \n \n \n"]
+  /bin/bash -c "echo installed kind and k9s. Opening new bash shell to continue execution from"
 fi
 
 # 2. Create kind cluster with containerd registry config dir enabled
