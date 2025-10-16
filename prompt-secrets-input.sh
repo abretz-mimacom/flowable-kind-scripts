@@ -68,7 +68,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "export FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/.bashrc
     echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
     
-    /bin/bash -c "echo Opening new shell to get updated .bashrc."
+    /bin/bash
     echo
     echo
 
