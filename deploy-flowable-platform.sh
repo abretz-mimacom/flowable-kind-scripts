@@ -15,6 +15,7 @@ RELEASE_NAME="${2:-flowable}"
 
 PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
 PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+SCRIPTS_DIR="${SCRIPTS_DIR:-$PROJECT_DIR/scripts}"
 echo
 echo "Project directory is: $PROJECT_DIR"
 
@@ -23,7 +24,7 @@ echo "Project directory is: $PROJECT_DIR"
 if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ] || [ -z "$FLOWABLE_LICENSE_KEY" ]; then
   echo
   echo "One or more required environment variables are not set."
-  source $PROJECT_DIR/prompt-secrets-input.sh
+  source "$SCRIPTS_DIR/prompt-secrets-input.sh"
 fi
 
 # Ensure required environment variables are set
@@ -40,7 +41,7 @@ if kubectl get namespace "$NAMESPACE" >/dev/null 2>&1; then
 else
   echo
   echo "Namespace $NAMESPACE does not exist. Creating it now."
-  source "$PROJECT_DIR/create-ns-secrets.sh" "$NAMESPACE" "$RELEASE_NAME"
+  source "$SCRIPTS_DIR/create-ns-secrets.sh" "$NAMESPACE" "$RELEASE_NAME"
 fi
 
 # Add the Flowable Helm repo
