@@ -36,7 +36,7 @@ if [ -n "$FLOWABLE_LICENSE_PATH" ]; then
     read -rp "Flowable license key [$FLOWABLE_LICENSE_PATH]: " input
     FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
 else
-    read -rp "Flowable license key: " FLOWABLE_LICENSE_KEY
+    read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
 fi
 
 FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
