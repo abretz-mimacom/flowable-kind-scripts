@@ -5,6 +5,7 @@ CLUSTER_NAME="${1:-kind}"
 
 PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
 PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+SCRIPTS_DIR="${SCRIPTS_DIR:-$PROJECT_DIR/scripts}"
 DISABLE_ARC="${2:-false}"
 SINGLE_CLUSTER="${3:-false}"
 
@@ -124,5 +125,5 @@ sleep 15
 
 # 7. Add github action runner
 if [ -z DISABLE_ARC ]; then
-  "$PROJECT_DIR/add-github-action-runner.sh" "$CLUSTER_NAME"
+  "$SCRIPTS_DIR/add-github-action-runner.sh" "$CLUSTER_NAME"
 fi
