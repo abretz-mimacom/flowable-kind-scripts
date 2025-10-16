@@ -43,29 +43,33 @@ fi
 #     echo "Error: FLOWABLE_LICENSE_KEY is required."
 #     exit 1
 # fi
+
   
   # Attempt to store as Codespace secrets if running in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
+    echo "FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/secrets.txt
+    echo "FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/secrets.txt
+    echo "FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/secrets.txt
     echo
     echo "Attempting to store variables as Codespace secrets..."
     
-    if gh codespace secrets set FLOWABLE_REPO_USER -b "$FLOWABLE_REPO_USER" 2>/dev/null; then
-      echo "✓ Successfully stored FLOWABLE_REPO_USER"
+    if gh secrets set --user -f - < ~/secrets.txt 2>/dev/null; then
+      echo "✓ Successfully stored secrets"
     else
-      echo "⚠ Warning: Failed to store FLOWABLE_REPO_USER"
+      echo "⚠ Warning: Failed to store secrets to codespaces secrets"
     fi
+    rm ~/secrets.txt
+    # if gh codespace secrets set FLOWABLE_REPO_PASSWORD -b "$FLOWABLE_REPO_PASSWORD" 2>/dev/null; then
+    #   echo "✓ Successfully stored FLOWABLE_REPO_PASSWORD"
+    # else
+    #   echo "⚠ Warning: Failed to store FLOWABLE_REPO_PASSWORD"
+    # fi
     
-    if gh codespace secrets set FLOWABLE_REPO_PASSWORD -b "$FLOWABLE_REPO_PASSWORD" 2>/dev/null; then
-      echo "✓ Successfully stored FLOWABLE_REPO_PASSWORD"
-    else
-      echo "⚠ Warning: Failed to store FLOWABLE_REPO_PASSWORD"
-    fi
-    
-    if gh codespace secrets set FLOWABLE_LICENSE_KEY -b "$FLOWABLE_LICENSE_KEY" 2>/dev/null; then
-      echo "✓ Successfully stored FLOWABLE_LICENSE_KEY"
-    else
-      echo "⚠ Warning: Failed to store FLOWABLE_LICENSE_KEY"
-    fi
+    # if gh codespace secrets set FLOWABLE_LICENSE_KEY -b "$FLOWABLE_LICENSE_KEY" 2>/dev/null; then
+    #   echo "✓ Successfully stored FLOWABLE_LICENSE_KEY"
+    # else
+    #   echo "⚠ Warning: Failed to store FLOWABLE_LICENSE_KEY"
+    # fi
 fi
 
 
@@ -76,8 +80,6 @@ echo "Adding env secrets to .bashrc"
 echo "export FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/.bashrc
 echo "export FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/.bashrc
 echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
-
-
 
 /bin/bash -c "echo Opening new shell to get updated .bashrc."
 echo
