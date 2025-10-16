@@ -56,9 +56,22 @@ if [ -n "$CODESPACE_NAME" ]; then
     if gh secrets set --user -f - < ~/secrets.txt 2>/dev/null; then
       echo "✓ Successfully stored secrets"
     else
-      echo "⚠ Warning: Failed to store secrets to codespaces secrets"
+      echo "⚠ Warning: Failed to store secrets to codespaces secrets. It is possible you lack the permissions to do so."
     fi
-    #rm ~/secrets.txt
+    
+    rm ~/secrets.txt
+
+    echo
+    echo 
+    echo "Adding env secrets to .bashrc for convenience"
+    echo "export FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/.bashrc
+    echo "export FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/.bashrc
+    echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
+    
+    /bin/bash -c "echo Opening new shell to get updated .bashrc."
+    echo
+    echo
+
     # if gh codespace secrets set FLOWABLE_REPO_PASSWORD -b "$FLOWABLE_REPO_PASSWORD" 2>/dev/null; then
     #   echo "✓ Successfully stored FLOWABLE_REPO_PASSWORD"
     # else
@@ -71,17 +84,3 @@ if [ -n "$CODESPACE_NAME" ]; then
     #   echo "⚠ Warning: Failed to store FLOWABLE_LICENSE_KEY"
     # fi
 fi
-
-
-echo
-echo
-echo 
-echo "Adding env secrets to .bashrc"
-echo "export FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/.bashrc
-echo "export FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/.bashrc
-echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
-
-/bin/bash -c "echo Opening new shell to get updated .bashrc."
-echo
-echo
-echo
