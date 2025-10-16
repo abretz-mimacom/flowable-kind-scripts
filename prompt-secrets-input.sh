@@ -68,6 +68,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "Adding env secrets to .bashrc for convenience"
     echo "export FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/.bashrc
     echo "export FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/.bashrc
+    echo "export FLOWABLE_LICENSE_PATH=\"$FLOWABLE_LICENSE_PATH\"" >> ~/.bashrc
     echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
     
     /bin/bash -c "echo \"Opening new shell to use env secrets.\""
