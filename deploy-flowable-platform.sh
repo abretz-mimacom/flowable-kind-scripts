@@ -15,7 +15,7 @@ RELEASE_NAME="${2:-flowable}"
 
 
 # Check for required environment variables and prompt if any are missing
-if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASS" ] || [ -z "$FLOWABLE_LICENSE_KEY" ]; then
+if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ] || [ -z "$FLOWABLE_LICENSE_KEY" ]; then
   echo "One or more required environment variables are not set."
   echo "Please provide values for the following:"
   echo
@@ -33,18 +33,18 @@ if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASS" ] || [ -z "$FLOWAB
     exit 1
   fi
   
-  # Prompt for FLOWABLE_REPO_PASS
-  if [ -n "$FLOWABLE_REPO_PASS" ]; then
+  # Prompt for FLOWABLE_REPO_PASSWORD
+  if [ -n "$FLOWABLE_REPO_PASSWORD" ]; then
     read -rsp "Flowable repository password [****]: " input
     echo
-    FLOWABLE_REPO_PASS="${input:-$FLOWABLE_REPO_PASS}"
+    FLOWABLE_REPO_PASSWORD="${input:-$FLOWABLE_REPO_PASSWORD}"
   else
-    read -rsp "Flowable repository password: " FLOWABLE_REPO_PASS
+    read -rsp "Flowable repository password: " FLOWABLE_REPO_PASSWORD
     echo
   fi
   
-  if [ -z "$FLOWABLE_REPO_PASS" ]; then
-    echo "Error: FLOWABLE_REPO_PASS is required."
+  if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
+    echo "Error: FLOWABLE_REPO_PASSWORD is required."
     exit 1
   fi
   
@@ -72,10 +72,10 @@ if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASS" ] || [ -z "$FLOWAB
       echo "⚠ Warning: Failed to store FLOWABLE_REPO_USER"
     fi
     
-    if gh codespace secrets set FLOWABLE_REPO_PASS -b "$FLOWABLE_REPO_PASS" 2>/dev/null; then
-      echo "✓ Successfully stored FLOWABLE_REPO_PASS"
+    if gh codespace secrets set FLOWABLE_REPO_PASSWORD -b "$FLOWABLE_REPO_PASSWORD" 2>/dev/null; then
+      echo "✓ Successfully stored FLOWABLE_REPO_PASSWORD"
     else
-      echo "⚠ Warning: Failed to store FLOWABLE_REPO_PASS"
+      echo "⚠ Warning: Failed to store FLOWABLE_REPO_PASSWORD"
     fi
     
     if gh codespace secrets set FLOWABLE_LICENSE_KEY -b "$FLOWABLE_LICENSE_KEY" 2>/dev/null; then
@@ -84,12 +84,6 @@ if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASS" ] || [ -z "$FLOWAB
       echo "⚠ Warning: Failed to store FLOWABLE_LICENSE_KEY"
     fi
   fi
-fi
-
-# Note: Script uses FLOWABLE_REPO_PASSWORD for Helm, but prompts use FLOWABLE_REPO_PASS
-# Set FLOWABLE_REPO_PASSWORD to match the existing code
-if [ -n "$FLOWABLE_REPO_PASS" ]; then
-  FLOWABLE_REPO_PASSWORD="$FLOWABLE_REPO_PASS"
 fi
 
 # Ensure required environment variables are set
