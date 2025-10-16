@@ -14,13 +14,77 @@ NAMESPACE="$1"
 RELEASE_NAME="${2:-flowable}"
 
 
-# @Copilot, please change this check&exit below to check for the existence of the below secret env vars. If one of them doesn't exist, please prompt for user input, then store those as Codespace secrets.
-# - FLOWABLE_REPO_USER 
-# - FLOWABLE_REPO_PASS
-# - FLOWABLE_LICENSE_KEY
+# Check for required environment variables and prompt if not set
+if [ -z "$FLOWABLE_REPO_USER" ]; then
+  echo "FLOWABLE_REPO_USER is not set."
+  read -rp "Please enter your Flowable repository username: " FLOWABLE_REPO_USER
+  
+  if [ -z "$FLOWABLE_REPO_USER" ]; then
+    echo "Error: FLOWABLE_REPO_USER is required."
+    exit 1
+  fi
+  
+  # Attempt to store as Codespace secret if running in Codespaces
+  if [ -n "$CODESPACE_NAME" ]; then
+    echo "Attempting to store FLOWABLE_REPO_USER as a Codespace secret..."
+    if gh codespace secrets set FLOWABLE_REPO_USER -b "$FLOWABLE_REPO_USER" 2>/dev/null; then
+      echo "Successfully stored FLOWABLE_REPO_USER as a Codespace secret."
+    else
+      echo "Warning: Failed to store FLOWABLE_REPO_USER as a Codespace secret. Continuing with current session value."
+    fi
+  fi
+fi
+
+if [ -z "$FLOWABLE_REPO_PASS" ]; then
+  echo "FLOWABLE_REPO_PASS is not set."
+  read -rsp "Please enter your Flowable repository password: " FLOWABLE_REPO_PASS
+  echo  # New line after password input
+  
+  if [ -z "$FLOWABLE_REPO_PASS" ]; then
+    echo "Error: FLOWABLE_REPO_PASS is required."
+    exit 1
+  fi
+  
+  # Attempt to store as Codespace secret if running in Codespaces
+  if [ -n "$CODESPACE_NAME" ]; then
+    echo "Attempting to store FLOWABLE_REPO_PASS as a Codespace secret..."
+    if gh codespace secrets set FLOWABLE_REPO_PASS -b "$FLOWABLE_REPO_PASS" 2>/dev/null; then
+      echo "Successfully stored FLOWABLE_REPO_PASS as a Codespace secret."
+    else
+      echo "Warning: Failed to store FLOWABLE_REPO_PASS as a Codespace secret. Continuing with current session value."
+    fi
+  fi
+fi
+
+if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
+  echo "FLOWABLE_LICENSE_KEY is not set."
+  read -rp "Please enter your Flowable license key: " FLOWABLE_LICENSE_KEY
+  
+  if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
+    echo "Error: FLOWABLE_LICENSE_KEY is required."
+    exit 1
+  fi
+  
+  # Attempt to store as Codespace secret if running in Codespaces
+  if [ -n "$CODESPACE_NAME" ]; then
+    echo "Attempting to store FLOWABLE_LICENSE_KEY as a Codespace secret..."
+    if gh codespace secrets set FLOWABLE_LICENSE_KEY -b "$FLOWABLE_LICENSE_KEY" 2>/dev/null; then
+      echo "Successfully stored FLOWABLE_LICENSE_KEY as a Codespace secret."
+    else
+      echo "Warning: Failed to store FLOWABLE_LICENSE_KEY as a Codespace secret. Continuing with current session value."
+    fi
+  fi
+fi
+
+# Note: Script uses FLOWABLE_REPO_PASSWORD for Helm, but prompts use FLOWABLE_REPO_PASS
+# Set FLOWABLE_REPO_PASSWORD to match the existing code if it was prompted
+if [ -n "$FLOWABLE_REPO_PASS" ]; then
+  FLOWABLE_REPO_PASSWORD="$FLOWABLE_REPO_PASS"
+fi
+
 # Ensure required environment variables are set
 if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
-    echo "Please set FLOWABLE_REPO_USER and FLOWABLE_REPO_PASSWORD environment variables."
+    echo "Error: FLOWABLE_REPO_USER and FLOWABLE_REPO_PASSWORD must be set."
     exit 1
 fi
 

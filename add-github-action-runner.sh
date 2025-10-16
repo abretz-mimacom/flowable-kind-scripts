@@ -23,7 +23,27 @@ kubectl get ns arc-runners >/dev/null 2>&1 || kubectl create ns arc-runners
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 helm repo update
 
-# @Copliot, please add a check for ARC_TOKEN and prompt for user input value if not exists. Please then attempt to store ARC_TOKEN as a Codespace secret. If for whatever reason, the saving of the secret fails, exit gracefully. If no value exists for ARC_TOKEN, the script cannot continue.
+# Check for ARC_TOKEN and prompt if not set
+if [ -z "$ARC_TOKEN" ]; then
+  echo "ARC_TOKEN is not set."
+  read -rp "Please enter your GitHub Personal Access Token for Actions Runner Controller: " ARC_TOKEN
+  
+  if [ -z "$ARC_TOKEN" ]; then
+    echo "Error: ARC_TOKEN is required. Script cannot continue without it."
+    exit 1
+  fi
+  
+  # Attempt to store as Codespace secret if running in Codespaces
+  if [ -n "$CODESPACE_NAME" ]; then
+    echo "Attempting to store ARC_TOKEN as a Codespace secret..."
+    if gh codespace secrets set ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
+      echo "Successfully stored ARC_TOKEN as a Codespace secret."
+    else
+      echo "Warning: Failed to store ARC_TOKEN as a Codespace secret. Continuing with current session value."
+    fi
+  fi
+fi
+
 # Let Helm create the secret & own it; pass the token via values
 helm upgrade --install actions-runner-controller \
   actions-runner-controller/actions-runner-controller \
