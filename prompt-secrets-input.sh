@@ -53,7 +53,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo
     echo "Attempting to store variables as Codespace secrets..."
     
-    if gh secrets set --user -f - < ~/secrets.txt 2>/dev/null; then
+    if gh secret set --user -f - < ~/secrets.txt 2>/dev/null; then
       echo "✓ Successfully stored secrets"
     else
       echo "⚠ Warning: Failed to store secrets to codespaces secrets. It is possible you lack the permissions to do so."
