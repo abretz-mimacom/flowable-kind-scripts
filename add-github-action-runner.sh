@@ -23,6 +23,7 @@ kubectl get ns arc-runners >/dev/null 2>&1 || kubectl create ns arc-runners
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 helm repo update
 
+# @Copliot, please add a check for ARC_TOKEN and prompt for user input value if not exists. Please then attempt to store ARC_TOKEN as a Codespace secret. If for whatever reason, the saving of the secret fails, exit gracefully. If no value exists for ARC_TOKEN, the script cannot continue.
 # Let Helm create the secret & own it; pass the token via values
 helm upgrade --install actions-runner-controller \
   actions-runner-controller/actions-runner-controller \
