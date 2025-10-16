@@ -27,6 +27,7 @@ if ! command -v kind >/dev/null 2>&1; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
   brew install kind derailed/k9s/k9s
+  /bin/bash -c ["echo", "\n \n \n Installed kind and k9s. Opening new bash shell to continue execution from \n \n \n"]
 fi
 
 # 2. Create kind cluster with containerd registry config dir enabled
@@ -123,5 +124,5 @@ sleep 15
 
 # 7. Add github action runner
 if [ -z DISABLE_ARC ]; then
-  "$PROJECT_DIR/scripts/add-github-action-runner.sh" "$CLUSTER_NAME"
+  "$PROJECT_DIR/add-github-action-runner.sh" "$CLUSTER_NAME"
 fi

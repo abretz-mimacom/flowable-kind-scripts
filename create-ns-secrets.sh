@@ -24,7 +24,7 @@ if kubectl get namespace "$DEPLOYMENT_NAMESPACE" >/dev/null 2>&1; then
   echo "Namespace $DEPLOYMENT_NAMESPACE exists. Will not attempt to create it."
 else
   echo "Namespace $DEPLOYMENT_NAMESPACE does not exist. Creating it now."
-  source "$PROJECT_DIR/scripts/create-ns.sh" "$DEPLOYMENT_NAMESPACE"
+  source "$PROJECT_DIR/create-ns.sh" "$DEPLOYMENT_NAMESPACE"
 fi
 
 # Check for FLOWABLE_LICENSE_KEY - raw text value (recommended ONLY putting in the Codespace secret environment variable)
@@ -57,7 +57,7 @@ fi
 
 echo "Attempting to delete existing secrets to avoid 'AlreadyExists' errors"
 
-source "$PROJECT_DIR/scripts/delete-ns-secrets.sh" "$DEPLOYMENT_NAMESPACE" "$RELEASE_NAME"
+source "$PROJECT_DIR/delete-ns-secrets.sh" "$DEPLOYMENT_NAMESPACE" "$RELEASE_NAME"
 
 echo "Creating secrets in namespace: $DEPLOYMENT_NAMESPACE"
 

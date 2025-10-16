@@ -13,27 +13,34 @@ fi
 NAMESPACE="$1"
 RELEASE_NAME="${2:-flowable}"
 
+PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
+PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+echo
+echo "Project directory is: $PROJECT_DIR"
 
-# @Copilot, please change this check&exit below to check for the existence of the below secret env vars. If one of them doesn't exist, please prompt for user input, then store those as Codespace secrets.
-# - FLOWABLE_REPO_USER 
-# - FLOWABLE_REPO_PASS
-# - FLOWABLE_LICENSE_KEY
+
+# Check for required environment variables and prompt if any are missing
+if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ] || [ -z "$FLOWABLE_LICENSE_KEY" ]; then
+  echo
+  echo "One or more required environment variables are not set."
+  source $PROJECT_DIR/prompt-secrets-input.sh
+fi
+
 # Ensure required environment variables are set
 if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
-    echo "Please set FLOWABLE_REPO_USER and FLOWABLE_REPO_PASSWORD environment variables."
+    echo
+    echo "Error: FLOWABLE_REPO_USER and FLOWABLE_REPO_PASSWORD must be set."
     exit 1
 fi
 
-PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
-PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
-echo "Project directory is: $PROJECT_DIR"
-
 # Check if namespace exists, if not create it
 if kubectl get namespace "$NAMESPACE" >/dev/null 2>&1; then
+  echo
   echo "Namespace $NAMESPACE exists. Will not attempt to create it."
 else
+  echo
   echo "Namespace $NAMESPACE does not exist. Creating it now."
-  source "$PROJECT_DIR/scripts/create-ns-secrets.sh" "$NAMESPACE" "$RELEASE_NAME"
+  source "$PROJECT_DIR/create-ns-secrets.sh" "$NAMESPACE" "$RELEASE_NAME"
 fi
 
 # Add the Flowable Helm repo
@@ -50,4 +57,8 @@ helm upgrade --install "$RELEASE_NAME" "$PROJECT_DIR/helm/" -f "$PROJECT_DIR/hel
     --namespace "$NAMESPACE" \
     --create-namespace
 
+echo
+echo
 echo "Flowable platform deployed with release name '$RELEASE_NAME' in namespace '$NAMESPACE'."
+echo
+echo
