@@ -58,7 +58,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     else
       echo "⚠ Warning: Failed to store secrets to codespaces secrets"
     fi
-    rm ~/secrets.txt
+    #rm ~/secrets.txt
     # if gh codespace secrets set FLOWABLE_REPO_PASSWORD -b "$FLOWABLE_REPO_PASSWORD" 2>/dev/null; then
     #   echo "✓ Successfully stored FLOWABLE_REPO_PASSWORD"
     # else
