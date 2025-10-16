@@ -32,17 +32,17 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
 fi
   
   # Prompt for FLOWABLE_LICENSE_KEY
-if [ -n "$FLOWABLE_LICENSE_KEY" ]; then
-    read -rp "Flowable license key [$FLOWABLE_LICENSE_KEY]: " input
-    FLOWABLE_LICENSE_KEY="${input:-$FLOWABLE_LICENSE_KEY}"
-else
-    read -rp "Flowable license key: " FLOWABLE_LICENSE_KEY
-fi
+# if [ -n "$FLOWABLE_LICENSE_KEY" ]; then
+#     read -rp "Flowable license key [$FLOWABLE_LICENSE_KEY]: " input
+#     FLOWABLE_LICENSE_KEY="${input:-$FLOWABLE_LICENSE_KEY}"
+# else
+#     read -rp "Flowable license key: " FLOWABLE_LICENSE_KEY
+# fi
   
-if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
-    echo "Error: FLOWABLE_LICENSE_KEY is required."
-    exit 1
-fi
+# if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
+#     echo "Error: FLOWABLE_LICENSE_KEY is required."
+#     exit 1
+# fi
   
   # Attempt to store as Codespace secrets if running in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
