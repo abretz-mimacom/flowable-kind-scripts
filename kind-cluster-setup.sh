@@ -5,6 +5,7 @@ CLUSTER_NAME="${1:-kind}"
 
 PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
 PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+SCRIPTS_DIR="${SCRIPTS_DIR:-$PROJECT_DIR/scripts}"
 DISABLE_ARC="${2:-false}"
 SINGLE_CLUSTER="${3:-false}"
 
@@ -27,7 +28,7 @@ if ! command -v kind >/dev/null 2>&1; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
   fi
   brew install kind derailed/k9s/k9s
-  /bin/bash -c ["echo", "\n \n \n Installed kind and k9s. Opening new bash shell to continue execution from \n \n \n"]
+  /bin/bash -c "echo installed kind and k9s. Opening new bash shell to continue execution from"
 fi
 
 # 2. Create kind cluster with containerd registry config dir enabled
@@ -40,7 +41,10 @@ fi
 # https://github.com/kubernetes-sigs/kind/issues/2875
 # https://github.com/containerd/containerd/blob/main/docs/cri/config.md#registry-configuration
 # See: https://github.com/containerd/containerd/blob/main/docs/hosts.md
-if [ -z $SINGLE_CLUSTER ]; then
+echo
+echo "SINGLE_CLUSTER set to $SINGLE_CLUSTER"
+echo
+if [ $SINGLE_CLUSTER != true ]; then
   echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
   kind: Cluster
@@ -55,9 +59,7 @@ if [ -z $SINGLE_CLUSTER ]; then
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
 EOF
-fi
-
-if [ $SINGLE_CLUSTER ]; then
+else
   echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
   kind: Cluster
@@ -124,5 +126,5 @@ sleep 15
 
 # 7. Add github action runner
 if [ -z DISABLE_ARC ]; then
-  "$PROJECT_DIR/add-github-action-runner.sh" "$CLUSTER_NAME"
+  "$SCRIPTS_DIR/add-github-action-runner.sh" "$CLUSTER_NAME"
 fi
