@@ -44,7 +44,7 @@ fi
 echo
 echo "SINGLE_CLUSTER set to $SINGLE_CLUSTER"
 echo
-if [ $SINGLE_CLUSTER != true]; then
+if [ $SINGLE_CLUSTER != true ]; then
   echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
   kind: Cluster
