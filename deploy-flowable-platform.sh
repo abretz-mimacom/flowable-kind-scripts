@@ -6,6 +6,7 @@ set -e
 # [namespace]: Kubernetes namespace (default: flowable)
 
 if [ -z "$1" ]; then
+    echo
     echo "Usage: $0 <release-name> [namespace]"
     exit 1
 fi
