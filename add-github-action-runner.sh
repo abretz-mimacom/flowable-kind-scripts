@@ -2,6 +2,8 @@
 set -o errexit
 
 CLUSTER_NAME="${1:-kind}"
+PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
+SCRIPTS_DIR="${SCRIPTS_DIR:-$PROJECT_DIR/scripts}"
 
 echo
 echo
@@ -29,7 +31,7 @@ helm repo update
 if [ -z "$ARC_TOKEN" ]; then
   echo
   echo "ARC_TOKEN variable are not set."
-  source $PROJECT_DIR/prompt-arc-token.sh
+  source $SCRIPTS_DIR/prompt-arc-token.sh
   echo
 fi
 
