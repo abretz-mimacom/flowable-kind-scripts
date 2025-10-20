@@ -41,6 +41,9 @@ fi
 # https://github.com/kubernetes-sigs/kind/issues/2875
 # https://github.com/containerd/containerd/blob/main/docs/cri/config.md#registry-configuration
 # See: https://github.com/containerd/containerd/blob/main/docs/hosts.md
+echo
+echo "SINGLE_CLUSTER set to $SINGLE_CLUSTER"
+echo
 if [ -z $SINGLE_CLUSTER ]; then
   echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
