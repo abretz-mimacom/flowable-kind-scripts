@@ -6,6 +6,7 @@ set -e
 # [namespace]: Kubernetes namespace (default: flowable)
 
 if [ -z "$1" ]; then
+    echo
     echo "Usage: $0 <release-name> [namespace]"
     exit 1
 fi
@@ -23,7 +24,7 @@ echo "Project directory is: $PROJECT_DIR"
 if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ] || [ -z "$FLOWABLE_LICENSE_KEY" ]; then
   echo
   echo "One or more required environment variables are not set."
-  source $PROJECT_DIR/prompt-secrets-input.sh
+  source $PROJECT_DIR/prompt-flowable-secrets.sh
 fi
 
 # Ensure required environment variables are set

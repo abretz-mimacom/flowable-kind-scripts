@@ -3,6 +3,8 @@ set -o errexit
 
 CLUSTER_NAME="${1:-kind}"
 
+echo
+echo
 echo "Setting up Cert Manager in Kubernetes"
 helm upgrade --install \
   cert-manager oci://quay.io/jetstack/charts/cert-manager \
@@ -25,23 +27,10 @@ helm repo update
 
 # Check for ARC_TOKEN and prompt if not set
 if [ -z "$ARC_TOKEN" ]; then
-  echo "ARC_TOKEN is not set."
-  read -rp "Please enter your GitHub Personal Access Token for Actions Runner Controller: " ARC_TOKEN
-  
-  if [ -z "$ARC_TOKEN" ]; then
-    echo "Error: ARC_TOKEN is required. Script cannot continue without it."
-    exit 1
-  fi
-  
-  # Attempt to store as Codespace secret if running in Codespaces
-  if [ -n "$CODESPACE_NAME" ]; then
-    echo "Attempting to store ARC_TOKEN as a Codespace secret..."
-    if gh codespace secrets set ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
-      echo "Successfully stored ARC_TOKEN as a Codespace secret."
-    else
-      echo "Warning: Failed to store ARC_TOKEN as a Codespace secret. Continuing with current session value."
-    fi
-  fi
+  echo
+  echo "ARC_TOKEN variable are not set."
+  source $PROJECT_DIR/prompt-arc-token.sh
+  echo
 fi
 
 # Let Helm create the secret & own it; pass the token via values
@@ -55,6 +44,7 @@ helm upgrade --install actions-runner-controller \
 kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
 
 echo "Waiting for ARC controller webhook service to be ready"
+ehco
 sleep 15
 
 
@@ -121,3 +111,5 @@ spec:
       labels: [self-hosted, kind, arc, "${CLUSTER_NAME}"]
       serviceAccountName: gh-runner
 EOF
+echo
+echo

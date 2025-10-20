@@ -1,7 +1,9 @@
 #!/bin/bash
 
-  echo "Please provide values for the following:"
-  echo
+set -o errexit
+
+echo "Please provide values for the following:"
+echo
   
   # Prompt for FLOWABLE_REPO_USER
 if [ -n "$FLOWABLE_REPO_USER" ]; then
