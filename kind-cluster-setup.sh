@@ -44,7 +44,7 @@ fi
 echo
 echo "SINGLE_CLUSTER set to $SINGLE_CLUSTER"
 echo
-if [ -z $SINGLE_CLUSTER ]; then
+if [ -$SINGLE_CLUSTER != true]; then
   echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
   kind: Cluster
@@ -59,9 +59,7 @@ if [ -z $SINGLE_CLUSTER ]; then
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
 EOF
-fi
-
-if [ $SINGLE_CLUSTER ]; then
+else
   echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
   kind: Cluster
