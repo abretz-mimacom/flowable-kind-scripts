@@ -125,6 +125,10 @@ echo "Waiting for ingress controller webhook service to be ready"
 sleep 15
 
 # 7. Add github action runner
+echo
+echo "DISABLE_ARC value is $DISABLE_ARC".
 if [ DISABLE_ARC != truse ]; then
+  echo "Setting up GitHub Action Runner to run inside cluster."
+  echo
   "$SCRIPTS_DIR/add-github-action-runner.sh" "$CLUSTER_NAME"
 fi
