@@ -32,6 +32,7 @@ if [ -z "$ARC_TOKEN" ]; then
   echo
   echo "ARC_TOKEN variable are not set."
   source $SCRIPTS_DIR/prompt-arc-token.sh
+  bash -c "echo \"Opening new shell to get lastest env.\""
   echo
 fi
 
