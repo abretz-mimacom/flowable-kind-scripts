@@ -26,6 +26,7 @@ if [ -z "$FLOWABLE_REPO_USER" ] || [ -z "$FLOWABLE_REPO_PASSWORD" ] || [ -z "$FL
   echo
   echo "One or more required environment variables are not set."
   source "$SCRIPTS_DIR/prompt-secrets-input.sh"
+  bash -c "echo \"Opening new shell to refresh secrets.\""
 fi
 
 # Ensure required environment variables are set
