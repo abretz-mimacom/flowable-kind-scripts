@@ -67,6 +67,9 @@ else
   name: "${CLUSTER_NAME}"
   nodes:
   - role: control-plane
+    extraMounts:
+      - hostPath: "${EXTRA_MOUNT_HOST_PATH}" # The path on your host machine
+        containerPath: /extra-mount
     extraPortMappings:
       - containerPort: 3011
         hostPort: 3011
