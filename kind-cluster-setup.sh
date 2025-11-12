@@ -124,7 +124,7 @@ data:
 EOF
 
 # 6. Add ingress controller
-helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --set controller.service.type=ClusterIP --namespace ingress-nginx --create-namespace
+helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --set controller.kind=DaemonSet --set controller.hostPort.enabled=true --set controller.publishService.enabled=false --namespace ingress-nginx --create-namespace
 
 echo "Waiting for ingress controller webhook service to be ready"
 sleep 15
