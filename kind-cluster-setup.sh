@@ -71,13 +71,11 @@ else
       - hostPath: "${EXTRA_MOUNT_HOST_PATH}" # The path on your host machine
         containerPath: /extra-mount
     extraPortMappings:
-      - containerPort: 30111
-        hostPort: 8480
-        listenAddress: 0.0.0.0
+      - containerPort: 80
+        hostPort: 80
         protocol: TCP
-      - containerPort: 30112
-        hostPort: 8443
-        listenAddress: 0.0.0.0
+      - containerPort: 443
+        hostPort: 443
         protocol: TCP
       - containerPort: 30001
         hostPort: 8081
