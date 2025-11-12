@@ -44,49 +44,49 @@ fi
 echo
 echo "SINGLE_CLUSTER set to $SINGLE_CLUSTER"
 echo
-if [ $SINGLE_CLUSTER != true ]; then
-  echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
-  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
-  kind: Cluster
-  apiVersion: kind.x-k8s.io/v1alpha4
-  name: "${CLUSTER_NAME}"
-  nodes:
-    - role: control-plane
-    - role: worker
-    - role: worker
-  containerdConfigPatches:
-  - |-
-    [plugins."io.containerd.grpc.v1.cri".registry]
-      config_path = "/etc/containerd/certs.d"
+# if [ $SINGLE_CLUSTER != true ]; then
+#   echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
+#   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
+#   kind: Cluster
+#   apiVersion: kind.x-k8s.io/v1alpha4
+#   name: "${CLUSTER_NAME}"
+#   nodes:
+#     - role: control-plane
+#     - role: worker
+#     - role: worker
+#   containerdConfigPatches:
+#   - |-
+#     [plugins."io.containerd.grpc.v1.cri".registry]
+#       config_path = "/etc/containerd/certs.d"
+# EOF
+# else
+echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
+cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: "${CLUSTER_NAME}"
+nodes:
+- role: control-plane
+  extraMounts:
+    - hostPath: "${EXTRA_MOUNT_HOST_PATH}" # The path on your host machine
+      containerPath: /extra-mount
+  extraPortMappings:
+    - containerPort: 80
+      hostPort: 80
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 443
+      protocol: TCP
+    # - containerPort: 30001
+    #   hostPort: 8081
+    #   listenAddress: 0.0.0.0
+    #   protocol: TCP
+containerdConfigPatches:
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry]
+    config_path = "/etc/containerd/certs.d"
 EOF
-else
-  echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
-  cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
-  kind: Cluster
-  apiVersion: kind.x-k8s.io/v1alpha4
-  name: "${CLUSTER_NAME}"
-  nodes:
-  - role: control-plane
-    extraMounts:
-      - hostPath: "${EXTRA_MOUNT_HOST_PATH}" # The path on your host machine
-        containerPath: /extra-mount
-    extraPortMappings:
-      - containerPort: 80
-        hostPort: 80
-        protocol: TCP
-      - containerPort: 443
-        hostPort: 443
-        protocol: TCP
-      - containerPort: 30001
-        hostPort: 8081
-        listenAddress: 0.0.0.0
-        protocol: TCP
-  containerdConfigPatches:
-  - |-
-    [plugins."io.containerd.grpc.v1.cri".registry]
-      config_path = "/etc/containerd/certs.d"
-EOF
-fi
+# fi
 # 3. Add the registry config to the nodes
 #
 # This is necessary because localhost resolves to loopback addresses that are
