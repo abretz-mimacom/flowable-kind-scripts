@@ -72,6 +72,10 @@ else
         containerPath: /extra-mount
     extraPortMappings:
       - containerPort: 30111
+        hostPort: 8480
+        listenAddress: 0.0.0.0
+        protocol: TCP
+      - containerPort: 30112
         hostPort: 8443
         listenAddress: 0.0.0.0
         protocol: TCP
