@@ -45,7 +45,21 @@ if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
     echo "Error: FLOWABLE_LICENSE_KEY is required."
     exit 1
 fi
-  
+
+    # Prompt for FLOWABLE_LICENSE_KEY
+if [ -n "$GITHUB_OAUTH_CLIENT_ID" ]; then
+    echo "Navigate to https://github.com/settings/applications/new?oauth_application[name]=flowable&oauth_application[url]=https://$CODESPACE_NAME-443.app.github.dev&oauth_application[callback_url]=https://$CODESPACE_NAME-443.app.github.dev \n and create an an oauth2 client application. Enter the ID/Secret in the prompts below."
+    read -rp "GitHub OAuth2 Client ID [$GITHUB_OAUTH_CLIENT_ID]: " input
+    GITHUB_OAUTH_CLIENT_ID="${input:-$GITHUB_OAUTH_CLIENT_ID}"
+else
+    read -rp "GitHub Client ID: " GITHUB_OAUTH_CLIENT_ID
+fi
+
+if [ -z "$GITHUB_OAUTH_CLIENT_ID" ]; then
+    echo "Error: GITHUB_OAUTH_CLIENT_ID is required."
+    exit 1
+fi
+
   # Attempt to store as Codespace secrets if running in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
     echo
