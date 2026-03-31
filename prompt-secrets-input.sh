@@ -48,10 +48,10 @@ fi
 
     # Prompt for GITHUB_OAUTH_CLIENT_ID
 if [ -n "$GITHUB_OAUTH_CLIENT_ID" ]; then
-    echo "Navigate to https://github.com/settings/applications/new?oauth_application[name]=flowable&oauth_application[url]=https://$CODESPACE_NAME-443.app.github.dev&oauth_application[callback_url]=https://$CODESPACE_NAME-443.app.github.dev \n and create an an oauth2 client application. Enter the ID/Secret in the prompts below."
     read -rp "GitHub OAuth2 Client ID [$GITHUB_OAUTH_CLIENT_ID]: " input
     GITHUB_OAUTH_CLIENT_ID="${input:-$GITHUB_OAUTH_CLIENT_ID}"
 else
+    echo "Navigate to https://github.com/settings/applications/new?oauth_application[name]=flowable&oauth_application[url]=https://$CODESPACE_NAME-443.app.github.dev&oauth_application[callback_url]=https://$CODESPACE_NAME-443.app.github.dev \n and create an an oauth2 client application. Enter the ID/Secret in the prompts below."
     read -rp "GitHub Client ID: " GITHUB_OAUTH_CLIENT_ID
 fi
 
