@@ -59,6 +59,16 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
   exit 1
 fi
 
+if [ -z "$GITHUB_OAUTH_CLIENT_ID" ]; then
+  echo "must have GITHUB_OAUTH_CLIENT_ID env variable set for secret creation"
+  exit 1
+fi
+
+if [ -z "$GITHUB_OAUTH_CLIENT_SECRET" ]; then
+  echo "must have GITHUB_OAUTH_CLIENT_ID env variable set for secret creation"
+  exit 1
+fi
+
 echo "Attempting to delete existing secrets to avoid 'AlreadyExists' errors"
 
 source "$SCRIPTS_DIR/delete-ns-secrets.sh" "$DEPLOYMENT_NAMESPACE" "$RELEASE_NAME"
@@ -73,4 +83,9 @@ kubectl create secret docker-registry "$RELEASE_NAME-flowable-regcred" \
 
 kubectl create secret generic "$RELEASE_NAME-flowable-license" \
   --from-file=flowable.license="$LICENSE_FILE_PATH" \
+  --namespace $DEPLOYMENT_NAMESPACE
+
+kubectl create secret generic "$RELEASE_NAME-github-oauth" \
+  --from-literal=clientId="$GITHUB_OAUTH_CLIENT_ID" \
+  --from-literal=clientSecret="$GITHUB_OAUTH_CLIENT_SECRET" \
   --namespace $DEPLOYMENT_NAMESPACE
