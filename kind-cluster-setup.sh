@@ -7,7 +7,7 @@ PROJECT_DIR="${CODESPACE_VSCODE_FOLDER:-$GITHUB_WORKSPACE}"
 PROJECT_DIR="${PROJECT_DIR:-$(pwd)}"
 SCRIPTS_DIR="${SCRIPTS_DIR:-$PROJECT_DIR/scripts}"
 DISABLE_ARC="${2:-false}"
-SINGLE_CLUSTER="${3:-false}"
+SINGLE_CLUSTER="${3:-true}"
 
 # 1. Create registry container unless it already exists
 reg_name='kind-registry'
@@ -41,8 +41,8 @@ fi
 # https://github.com/kubernetes-sigs/kind/issues/2875
 # https://github.com/containerd/containerd/blob/main/docs/cri/config.md#registry-configuration
 # See: https://github.com/containerd/containerd/blob/main/docs/hosts.md
+
 echo
-echo "SINGLE_CLUSTER set to $SINGLE_CLUSTER"
 echo
 if [ $CLUSTER_NAME = "prod" ]; then
   echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
@@ -56,35 +56,14 @@ if [ $CLUSTER_NAME = "prod" ]; then
       - hostPath: "${EXTRA_MOUNT_HOST_PATH}" # The path on your host machine
         containerPath: /extra-mount
     extraPortMappings:
-      - containerPort: 80
-        hostPort: 80
-        protocol: TCP
-      - containerPort: 443
+      - containerPort: 443 # expose port 443 for prod ingress controller
         hostPort: 443
         protocol: TCP
-      # - containerPort: 30001
-      #   hostPort: 8081
-      #   listenAddress: 0.0.0.0
-      #   protocol: TCP
   containerdConfigPatches:
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
 EOF
-#   echo "Creating 3-node kind cluster ${CLUSTER_NAME}..."
-#   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
-#   kind: Cluster
-#   apiVersion: kind.x-k8s.io/v1alpha4
-#   name: "${CLUSTER_NAME}"
-#   nodes:
-#     - role: control-plane
-#     - role: worker
-#     - role: worker
-#   containerdConfigPatches:
-#   - |-
-#     [plugins."io.containerd.grpc.v1.cri".registry]
-#       config_path = "/etc/containerd/certs.d"
-# EOF
 else
   echo "Creating singe-node kind cluster ${CLUSTER_NAME}..."
   cat <<EOF | kind create cluster --name "$CLUSTER_NAME" --config=-
@@ -96,12 +75,17 @@ else
     extraMounts:
       - hostPath: "${EXTRA_MOUNT_HOST_PATH}" # The path on your host machine
         containerPath: /extra-mount
+    extraPortMappings:
+      - containerPort: 80 # expose port 80 for non-prod ingress controller
+        hostPort: 80
+        protocol: TCP
   containerdConfigPatches:
   - |-
     [plugins."io.containerd.grpc.v1.cri".registry]
       config_path = "/etc/containerd/certs.d"
 EOF
 fi
+
 # 3. Add the registry config to the nodes
 #
 # This is necessary because localhost resolves to loopback addresses that are
@@ -110,6 +94,8 @@ fi
 #
 # We want a consistent name that works from both ends, so we tell containerd to
 # alias localhost:${reg_port} to the registry container when pulling images
+
+
 echo "Adding the local registry path to the container"
 REGISTRY_DIR="/etc/containerd/certs.d/localhost:${reg_port}"
 for node in $(kind get nodes --name "$CLUSTER_NAME"); do
