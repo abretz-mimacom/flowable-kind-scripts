@@ -3,7 +3,7 @@
   echo "Please provide values for the following:"
   echo
 
-CLUSTER_NAME="{$1:-dev}"  
+NAMESPACE="{$1:-dev}"  
   # Prompt for FLOWABLE_REPO_USER
 if [ -n "$FLOWABLE_REPO_USER" ]; then
     read -rp "Flowable repository username [$FLOWABLE_REPO_USER]: " input
@@ -50,7 +50,7 @@ if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
 fi
 
 # Prompt for GITHUB_OAUTH_CLIENT_ID if in prod
-if [ "$CLUSTER_NAME" == "prod" ]; then
+if [ "$NAMESPACE" == "prod" ] || [ "$NAMESPACE" == "stg" ]; then
   if [ -n "$GITHUB_OAUTH_CLIENT_ID" ]; then
       read -rp "GitHub OAuth2 Client ID [$GITHUB_OAUTH_CLIENT_ID]: " input
       GITHUB_OAUTH_CLIENT_ID="${input:-$GITHUB_OAUTH_CLIENT_ID}"
@@ -82,7 +82,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/secrets.txt
     echo "FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/secrets.txt
     echo "FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/secrets.txt
-    if [ $CLUSTER_NAME == "prod" ]; then
+    if [ "$NAMESPACE" == "prod" ] || [ "$NAMESPACE" == "stg" ]; then
       echo "GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/secrets.txt
       echo "GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/secrets.txt
     fi 
@@ -104,7 +104,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "export FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/.bashrc
     echo "export FLOWABLE_LICENSE_PATH=\"$FLOWABLE_LICENSE_PATH\"" >> ~/.bashrc
     echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
-    if [ $CLUSTER_NAME == "prod" ]; then
+    if [ "$NAMESPACE" == "prod" ] || [ "$NAMESPACE" == "stg" ]; then
       echo "export GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/.bashrc
       echo "export GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/.bashrc
     fi 
