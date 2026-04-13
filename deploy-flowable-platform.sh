@@ -22,7 +22,7 @@ echo "Project directory is: $PROJECT_DIR"
 
 
 # Check for required environment variables and prompt if any are missing
-if [[ -z "$FLOWABLE_REPO_USER" || -z "$FLOWABLE_REPO_PASSWORD" || -z "$FLOWABLE_LICENSE_KEY" || (( -z "$GITHUB_OAUTH_CLIENT_ID" || -z "$GITHUB_OAUTH_CLIENT_SECRET" ) && ( "$NAMESPACE" == "stg" || "$NAMESPACE" == "prod" )) ]]; then  echo
+if [[ -z "$FLOWABLE_REPO_USER" || -z "$FLOWABLE_REPO_PASSWORD" || -z "$FLOWABLE_LICENSE_KEY" || (( -z "$GITHUB_OAUTH_CLIENT_ID" || -z "$GITHUB_OAUTH_CLIENT_SECRET" ) && ( "$NAMESPACE" == "stg" || "$NAMESPACE" == "prod" )) ]]; then  
   echo "One or more required environment variables are not set."
   source "$SCRIPTS_DIR/prompt-secrets-input.sh" "$NAMESPACE"
   bash -c "echo \"Opening new shell to refresh secrets.\""
