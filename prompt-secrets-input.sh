@@ -33,7 +33,7 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
 fi
   
   # Prompt for FLOWABLE_LICENSE_KEY
-if [[ -n "$FLOWABLE_LICENSE_PATH" || -n "$FLOWABLE_LICENSE_KEY"]]; then
+if [ -n "$FLOWABLE_LICENSE_PATH"] || [ -n "$FLOWABLE_LICENSE_KEY"]; then
     read -rp "Flowable license file path [$FLOWABLE_LICENSE_PATH]: " input
     FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
 else
