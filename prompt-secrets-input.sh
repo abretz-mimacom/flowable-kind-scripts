@@ -3,7 +3,7 @@
   echo "Please provide values for the following:"
   echo
 
-NAMESPACE="{$1:-dev}"  
+NAMESPACE="${1:-dev}"  
   # Prompt for FLOWABLE_REPO_USER
 if [ -n "$FLOWABLE_REPO_USER" ]; then
     read -rp "Flowable repository username [$FLOWABLE_REPO_USER]: " input
