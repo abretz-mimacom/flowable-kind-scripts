@@ -59,12 +59,12 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
   exit 1
 fi
 
-if [ -z "$GITHUB_OAUTH_CLIENT_ID" ]; then
+if [ -z "$GITHUB_OAUTH_CLIENT_ID" ] && [ "$DEPLOYMENT_NAMESPACE" == "prod" ]; then
   echo "must have GITHUB_OAUTH_CLIENT_ID env variable set for secret creation"
   exit 1
 fi
 
-if [ -z "$GITHUB_OAUTH_CLIENT_SECRET" ]; then
+if [ -z "$GITHUB_OAUTH_CLIENT_SECRET" ] && [ "$DEPLOYMENT_NAMESPACE" == "prod" ]; then
   echo "must have GITHUB_OAUTH_CLIENT_ID env variable set for secret creation"
   exit 1
 fi
