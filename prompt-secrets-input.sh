@@ -76,7 +76,7 @@ if [ $CLUSTER_NAME = "prod" ]; then
       exit 1
   fi 
 
-if
+fi
   # Attempt to store as Codespace secrets if running in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
     echo "FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/secrets.txt
