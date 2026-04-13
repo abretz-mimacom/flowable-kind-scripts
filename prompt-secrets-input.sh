@@ -31,15 +31,18 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
     echo "Error: FLOWABLE_REPO_PASSWORD is required."
     exit 1
 fi
-  
+
+if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
   # Prompt for FLOWABLE_LICENSE_KEY
-if [ -n "$FLOWABLE_LICENSE_PATH"] || [ -n "$FLOWABLE_LICENSE_KEY"]; then
-    read -rp "Flowable license file path [$FLOWABLE_LICENSE_PATH]: " input
-    FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
-else
-    read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
-    FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
-fi
+  if [ -n "$FLOWABLE_LICENSE_PATH"]; then
+      read -rp "Flowable license file path [$FLOWABLE_LICENSE_PATH]: " input
+      FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
+  else
+      read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
+      FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
+  fi
+if
+
 
 if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
     echo "Error: FLOWABLE_LICENSE_KEY is required."
