@@ -33,14 +33,13 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
 fi
   
   # Prompt for FLOWABLE_LICENSE_KEY
-if [ -n "$FLOWABLE_LICENSE_PATH" ]; then
-    read -rp "Flowable license key [$FLOWABLE_LICENSE_PATH]: " input
+if [[ -n "$FLOWABLE_LICENSE_PATH" || -n "$FLOWABLE_LICENSE_KEY"]]; then
+    read -rp "Flowable license file path [$FLOWABLE_LICENSE_PATH]: " input
     FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
 else
     read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
+    FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
 fi
-
-FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
 
 if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
     echo "Error: FLOWABLE_LICENSE_KEY is required."
@@ -63,10 +62,10 @@ if [ $CLUSTER_NAME = "prod" ]; then
   fi
   
   if [ -n "$GITHUB_OAUTH_CLIENT_SECRET" ]; then
-      read -rp "GitHub OAuth2 Client Secret [*****]: " input
+      read -rsp "GitHub OAuth2 Client Secret [*****]: " input
       GITHUB_OAUTH_CLIENT_SECRET="${input:-$GITHUB_OAUTH_CLIENT_SECRET}"
   else
-      read -rp "GitHub Client Secret: " GITHUB_OAUTH_CLIENT_SECRET
+      read -rsp "GitHub Client Secret: " GITHUB_OAUTH_CLIENT_SECRET
   fi
   
   if [ -z "$GITHUB_OAUTH_CLIENT_SECRET" ]; then
