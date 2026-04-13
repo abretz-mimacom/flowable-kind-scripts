@@ -50,7 +50,7 @@ if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
 fi
 
 # Prompt for GITHUB_OAUTH_CLIENT_ID if in prod
-if [ ( "$NAMESPACE" == "stg" || "$NAMESPACE" == "prod" )]; then
+if [ "$NAMESPACE" == "stg" ] || [ "$NAMESPACE" == "prod" ]; then
   if [ -n "$GITHUB_OAUTH_CLIENT_ID" ]; then
       read -rp "GitHub OAuth2 Client ID [$GITHUB_OAUTH_CLIENT_ID]: " input
       GITHUB_OAUTH_CLIENT_ID="${input:-$GITHUB_OAUTH_CLIENT_ID}"
