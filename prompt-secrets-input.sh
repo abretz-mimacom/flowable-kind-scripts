@@ -35,7 +35,7 @@ fi
 if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
   # Prompt for FLOWABLE_LICENSE_KEY
   if [ -n "$FLOWABLE_LICENSE_PATH"]; then
-      read -rp "Flowable license file path [$FLOWABLE_LICENSE_PATH]: " input
+      read -rp "Use existing FLOWABLE_LICENSE_KEY (enter), or enter a new file path [*****]: " input
       FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
   else
       read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
@@ -50,7 +50,7 @@ if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
 fi
 
 # Prompt for GITHUB_OAUTH_CLIENT_ID if in prod
-if [ $CLUSTER_NAME = "prod" ]; then
+if [ $CLUSTER_NAME == "prod" ]; then
   if [ -n "$GITHUB_OAUTH_CLIENT_ID" ]; then
       read -rp "GitHub OAuth2 Client ID [$GITHUB_OAUTH_CLIENT_ID]: " input
       GITHUB_OAUTH_CLIENT_ID="${input:-$GITHUB_OAUTH_CLIENT_ID}"
