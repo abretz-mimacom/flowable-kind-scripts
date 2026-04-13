@@ -109,7 +109,7 @@ if [ -n "$CODESPACE_NAME" ]; then
       echo "export GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/.bashrc
     fi 
     
-    /bin/bash -c "echo \"Opening new shell to use env secrets.\""
+    . ~/.bashrc
     echo
     echo
 
