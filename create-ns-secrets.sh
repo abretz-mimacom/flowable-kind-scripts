@@ -85,7 +85,9 @@ kubectl create secret generic "$RELEASE_NAME-flowable-license" \
   --from-file=flowable.license="$LICENSE_FILE_PATH" \
   --namespace $DEPLOYMENT_NAMESPACE
 
-kubectl create secret generic "$RELEASE_NAME-github-oauth" \
-  --from-literal=clientId="$GITHUB_OAUTH_CLIENT_ID" \
-  --from-literal=clientSecret="$GITHUB_OAUTH_CLIENT_SECRET" \
-  --namespace $DEPLOYMENT_NAMESPACE
+if [[ "$DEPLOYMENT_NAMESPACE" == "stg" || "$DEPLOYMENT_NAMESPACE" == "prod" ]]; then
+  kubectl create secret generic "$RELEASE_NAME-github-oauth" \
+    --from-literal=clientId="$GITHUB_OAUTH_CLIENT_ID" \
+    --from-literal=clientSecret="$GITHUB_OAUTH_CLIENT_SECRET" \
+    --namespace $DEPLOYMENT_NAMESPACE
+fi
