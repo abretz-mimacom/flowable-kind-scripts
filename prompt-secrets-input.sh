@@ -41,7 +41,7 @@ if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
       read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
       FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
   fi
-if
+fi
 
 
 if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
