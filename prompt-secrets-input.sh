@@ -85,7 +85,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     if [ $CLUSTER_NAME = "prod" ]; then
       echo "GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/secrets.txt
       echo "GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/secrets.txt
-    if 
+    fi 
     echo
     echo "Attempting to store variables as Codespace secrets..."
     
@@ -107,7 +107,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     if [ $CLUSTER_NAME = "prod" ]; then
       echo "export GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/.bashrc
       echo "export GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/.bashrc
-    if 
+    fi 
     
     /bin/bash -c "echo \"Opening new shell to use env secrets.\""
     echo
