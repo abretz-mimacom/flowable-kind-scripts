@@ -34,13 +34,13 @@ fi
 
 if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
   # Prompt for FLOWABLE_LICENSE_KEY
-  if [ -n "$FLOWABLE_LICENSE_PATH"]; then
-      read -rp "Use existing FLOWABLE_LICENSE_KEY (enter), or enter a new file path [*****]: " input
-      FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
+  if [ -z "$FLOWABLE_LICENSE_PATH"]; then
+      read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH 
   else
-      read -rp "Flowable license file path: " FLOWABLE_LICENSE_PATH
-      FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")"  
+      read -rp "Flowable license file path [$FLOWABLE_LICENSE_PATH]: " input
+      FLOWABLE_LICENSE_PATH="${input:-$FLOWABLE_LICENSE_PATH}"
   fi
+  FLOWABLE_LICENSE_KEY="$(cat "$FLOWABLE_LICENSE_PATH" 2>/dev/null || echo "")" 
 fi
 
 
