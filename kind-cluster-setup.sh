@@ -96,7 +96,7 @@ fi
 # alias localhost:${reg_port} to the registry container when pulling images
 
 
-echo "Adding the local registry path to the container"
+# echo "Adding the local registry path to the container"
 REGISTRY_DIR="/etc/containerd/certs.d/localhost:${reg_port}"
 for node in $(kind get nodes --name "$CLUSTER_NAME"); do
   echo "Adding the local registry path to the container: " $CLUSTER_NAME
@@ -106,10 +106,38 @@ for node in $(kind get nodes --name "$CLUSTER_NAME"); do
 EOF
 done
 
+# DB_DIR="/etc/containerd/certs.d/localhost:5432"
+# for node in $(kind get nodes --name "$CLUSTER_NAME"); do
+#   echo "Adding db path to the container: " $CLUSTER_NAME
+#   docker exec "${node}" mkdir -p "${DB_DIR}"
+#   cat <<EOF | docker exec -i "${node}" cp /dev/stdin "${DB_DIR}/hosts.toml"
+# [host."http://docker-flowable-db-1:5432"]
+# EOF
+# done
+
+# INDEX_DIR="/etc/containerd/certs.d/localhost:9200"
+# for node in $(kind get nodes --name "$CLUSTER_NAME"); do
+#   echo "Adding index path to the container: " $CLUSTER_NAME
+#   docker exec "${node}" mkdir -p "${INDEX_DIR}"
+#   cat <<EOF | docker exec -i "${node}" cp /dev/stdin "${INDEX_DIR}/hosts.toml"
+# [host."http://docker-flowable-index-1:9200"]
+# EOF
+# done
+
 # 4. Connect the registry to the cluster network if not already connected
 # This allows kind to bootstrap the network but ensures they're on the same network
 if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "${reg_name}")" = 'null' ]; then
   docker network connect "kind" "${reg_name}"
+fi
+
+if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "docker-flowable-db-1")" = 'null' ]; then
+  echo "Connecting kind network to db container"
+  docker network connect "kind" "docker-flowable-db-1"
+fi
+
+if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "docker-flowable-index-1")" = 'null' ]; then
+  echo "Connecting kind network to index container"
+  docker network connect "kind" "docker-flowable-index-1"
 fi
 
 # 5. Document the local registry
