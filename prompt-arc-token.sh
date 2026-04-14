@@ -7,11 +7,11 @@ echo "Please provide values for the following:"
   
 # Prompt for ARC_TOKEN
 if [ -n "$ARC_TOKEN" ]; then
-    read -rsp "Flowable repository password [****]: " input
+    read -rsp "GitHub ARC token [****]: " input
     echo
     ARC_TOKEN="${input:-$ARC_TOKEN}"
 else
-    read -rsp "Flowable repository password: " ARC_TOKEN
+    read -rsp "GitHub ARC token: " ARC_TOKEN
     echo
 fi
   
