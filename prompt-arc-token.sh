@@ -11,6 +11,7 @@ if [ -n "$ARC_TOKEN" ]; then
     echo
     ARC_TOKEN="${input:-$ARC_TOKEN}"
 else
+    echo "Navigate to https://github.com/settings/tokens to create a token for this repository"
     read -rsp "GitHub ARC token: " ARC_TOKEN
     echo
 fi
