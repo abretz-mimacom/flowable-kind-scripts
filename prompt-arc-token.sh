@@ -37,7 +37,7 @@ echo
 echo
 echo 
 echo "Adding env secrets to .bashrc"
-echo "echo $ARC_TOKEN" >> ~/.bashrc
+echo "export ARC_TOKEN=\"$ARC_TOKEN\"" >> ~/.bashrc
 
 /bin/bash -c "echo Opening new shell to get updated .bashrc."
 echo
