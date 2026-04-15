@@ -19,15 +19,15 @@ fi
 if [ -z "$ARC_TOKEN" ]; then
     echo "Error: ARC_TOKEN is required."
     exit 1
-else
-    echo "$ARC_TOKEN" | gh auth login -p https --with-token
 fi
 
   # Attempt to store as Codespace secrets if running in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
     echo
     echo "Attempting to store variables as Codespace secrets..."
-    if gh secret set --user ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
+    GITHUB_TOKEN=""
+    echo $ARC_TOKEN | gh auth login --with-token
+    if gh secret set ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
       echo "✓ Successfully stored ARC_TOKEN"
     else
       echo "⚠ Warning: Failed to store ARC_TOKEN"
