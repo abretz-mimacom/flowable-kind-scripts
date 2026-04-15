@@ -27,8 +27,7 @@ fi
 if [ -n "$CODESPACE_NAME" ]; then
     echo
     echo "Attempting to store variables as Codespace secrets..."
-    
-    if gh codespace secrets set ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
+    if gh secret set --user ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
       echo "✓ Successfully stored ARC_TOKEN"
     else
       echo "⚠ Warning: Failed to store ARC_TOKEN"
