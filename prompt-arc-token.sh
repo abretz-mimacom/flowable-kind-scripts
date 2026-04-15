@@ -19,6 +19,8 @@ fi
 if [ -z "$ARC_TOKEN" ]; then
     echo "Error: ARC_TOKEN is required."
     exit 1
+else
+    echo "$ARC_TOKEN" | gh auth login -p https --with-token
 fi
 
   # Attempt to store as Codespace secrets if running in Codespaces
