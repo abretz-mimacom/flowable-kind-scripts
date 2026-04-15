@@ -86,10 +86,19 @@ if [ -n "$CODESPACE_NAME" ]; then
       echo "GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/secrets.txt
       echo "GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/secrets.txt
     fi 
+    
     echo
     echo "Attempting to store variables as Codespace secrets..."
-    
-    if gh secret set --user -f - < ~/secrets.txt 2>/dev/null; then
+    source ~/.bashrc
+    export GITHUB_TOKEN=""
+    echo $ARC_TOKEN | gh auth login --with-token
+    if gh secret set -f - < ~/secrets.txt 2>/dev/null; then
+      echo "✓ Successfully stored secrets"
+    else
+      echo "⚠ Warning: Failed to store secrets to codespaces secrets. It is possible you lack the permissions to do so."
+    fi
+
+    if gh secret set -R $GITHUB_USER/flowable-model-repo -f - < ~/secrets.txt 2>/dev/null; then
       echo "✓ Successfully stored secrets"
     else
       echo "⚠ Warning: Failed to store secrets to codespaces secrets. It is possible you lack the permissions to do so."
