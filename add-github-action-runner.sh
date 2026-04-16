@@ -36,8 +36,16 @@ if [ -z "$ARC_TOKEN" ]; then
   echo
 fi
 
-ehco
+# Let Helm create the secret & own it; pass the token via values
+helm upgrade --install actions-runner-controller \
+  actions-runner-controller/actions-runner-controller \
+  --namespace actions-runner-system \
+  --set authSecret.create=true \
+  --set authSecret.github_token="${ARC_TOKEN}" 
+# ARC controller + webhook
+kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
 
+sleep 30
 
 echo "Applying GitHub Actions RunnerDeployment"
 cat <<EOF | kubectl apply -f -
@@ -64,10 +72,10 @@ metadata:
   name: gh-runner-read-cluster
 rules:
   - apiGroups: ["", "apps", "ci"]
-    resources: ["pods", "configmaps", "secrets", "services", "deployments", "replicasets", "namespaces", "statefulsets", "daemonsets", "jobs", "cronjobs", "ingresses", "networkpolicies", "pods", "pods/log", "pods/exec", "serviceaccounts", "persistentvolumeclaims"]
+    resources: ["pods", "configmaps", "secrets", "services", "deployments", "replicasets", "namespaces", "statefulsets", "daemonsets", "jobs", "cronjobs", "ingresses", "networkpolicies", "pods", "pods/log", "pods/exec", "serviceaccounts", "persistentvolumeclaims", "ingress"]
     verbs: ["get","list","watch","create","update","patch","delete"]
   - apiGroups: ["networking.k8s.io"]
-    resources: ["networkpolicies"]
+    resources: ["networkpolicies", "ingresses"]
     verbs: ["get","list","watch","create","update","patch","delete"]
   - apiGroups: ["policy"]
     resources: ["poddisruptionbudgets"]
@@ -104,13 +112,3 @@ spec:
 EOF
 echo
 echo
-
-helm upgrade --install actions-runner-controller \
-  actions-runner-controller/actions-runner-controller \
-  --namespace actions-runner-system \
-  --set authSecret.create=true \
-  --set authSecret.github_token="${ARC_TOKEN}" 
-# ARC controller + webhook
-kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
-
-echo "Waiting for ARC controller webhook service to be ready"
