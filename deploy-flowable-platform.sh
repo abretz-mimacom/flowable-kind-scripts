@@ -46,9 +46,9 @@ else
 fi
 
 # Add the Flowable Helm repo
-helm repo add flowable https://repo.flowable.com/flowable-helm \
-    --username "$FLOWABLE_REPO_USER" \
-    --password "$FLOWABLE_REPO_PASSWORD"
+if helm repo add flowable https://repo.flowable.com/flowable-helm --username "$FLOWABLE_REPO_USER" --password "$FLOWABLE_REPO_PASSWORD" >/dev/null 2>&1; then
+  echo "Error while adding the Flowable helm repo. Assuming helm repo already exists."
+fi
 
 helm repo update
 
