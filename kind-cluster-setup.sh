@@ -130,16 +130,6 @@ if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "${reg_name}
   docker network connect "kind" "${reg_name}"
 fi
 
-if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "docker-flowable-db-1")" = 'null' ]; then
-  echo "Connecting kind network to db container"
-  docker network connect "kind" "docker-flowable-db-1"
-fi
-
-if [ "$(docker inspect -f='{{json .NetworkSettings.Networks.kind}}' "docker-flowable-index-1")" = 'null' ]; then
-  echo "Connecting kind network to index container"
-  docker network connect "kind" "docker-flowable-index-1"
-fi
-
 # 5. Document the local registry
 # https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry
 cat <<EOF | kubectl apply -f -
