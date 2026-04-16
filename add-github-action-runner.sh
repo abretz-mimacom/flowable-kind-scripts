@@ -36,19 +36,7 @@ if [ -z "$ARC_TOKEN" ]; then
   echo
 fi
 
-# Let Helm create the secret & own it; pass the token via values
-helm upgrade --install actions-runner-controller \
-  actions-runner-controller/actions-runner-controller \
-  --namespace actions-runner-system \
-  --set authSecret.create=true \
-  --set authSecret.github_token="${ARC_TOKEN}" \
-
-# ARC controller + webhook
-kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
-
-echo "Waiting for ARC controller webhook service to be ready"
 ehco
-sleep 15
 
 
 echo "Applying GitHub Actions RunnerDeployment"
@@ -116,3 +104,13 @@ spec:
 EOF
 echo
 echo
+
+helm upgrade --install actions-runner-controller \
+  actions-runner-controller/actions-runner-controller \
+  --namespace actions-runner-system \
+  --set authSecret.create=true \
+  --set authSecret.github_token="${ARC_TOKEN}" 
+# ARC controller + webhook
+kubectl -n actions-runner-system rollout status deploy/actions-runner-controller --timeout=180s
+
+echo "Waiting for ARC controller webhook service to be ready"
