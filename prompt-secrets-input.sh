@@ -79,6 +79,7 @@ if [ "$NAMESPACE" == "stg" ] || [ "$NAMESPACE" == "prod" ]; then
 fi
   # Attempt to store as Codespace secrets if running in Codespaces
 if [ -n "$CODESPACE_NAME" ]; then
+    echo "ARC_TOKEN=\"$ARC_TOKEN\"" >> ~/secrets.txt
     echo "FLOWABLE_REPO_USER=\"$FLOWABLE_REPO_USER\"" >> ~/secrets.txt
     echo "FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/secrets.txt
     echo "FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/secrets.txt
