@@ -102,7 +102,7 @@ if [ -n "$CODESPACE_NAME" ]; then
     if gh secret set -R $GITHUB_USER/flowable-models-repo -f - < ~/secrets.txt 2>/dev/null; then
       echo "✓ Successfully stored secrets"
     else
-      echo "⚠ Warning: Failed to store secrets to codespaces secrets. It is possible you lack the permissions to do so."
+      echo "⚠ Warning: Failed to store secrets to codespaces secrets to ${GITHUB_USER}/flowable-models-repo. It is possible you lack the permissions to do so."
     fi
     
     rm ~/secrets.txt
