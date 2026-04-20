@@ -25,7 +25,7 @@ fi
 if [ -n "$CODESPACE_NAME" ]; then
     echo
     echo "Attempting to store variables as Codespace secrets..."
-    GITHUB_TOKEN=""
+    export GITHUB_TOKEN=""
     echo $ARC_TOKEN | gh auth login --with-token
     if gh secret set ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
       echo "✓ Successfully stored ARC_TOKEN"
@@ -40,7 +40,7 @@ echo
 echo "Adding env secrets to .bashrc"
 echo "export ARC_TOKEN=\"$ARC_TOKEN\"" >> ~/.bashrc
 
-/bin/bash -c "echo Opening new shell to get updated .bashrc."
+
 echo
 echo
 echo
