@@ -119,7 +119,7 @@ if [ -n "$CODESPACE_NAME" ]; then
       echo "export GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/.bashrc
     fi 
     
-    . ~/.bashrc
+    source ~/.bashrc
     echo
     echo
 
