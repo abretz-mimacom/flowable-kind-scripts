@@ -25,6 +25,7 @@ fi
 if [ -n "$CODESPACE_NAME" ]; then
     echo
     echo "Attempting to store variables as Codespace secrets..."
+    source ~/.bashrc
     export GITHUB_TOKEN=""
     echo $ARC_TOKEN | gh auth login --with-token
     if gh secret set ARC_TOKEN -b "$ARC_TOKEN" 2>/dev/null; then
