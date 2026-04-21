@@ -114,8 +114,8 @@ spec:
           cpu: "0.5"
           memory: "2Gi"
         requests:
-          cpu: "0.5"
-          memory: "2Gi"
+          cpu: "0.25"
+          memory: "0.5Gi"
 EOF
 echo
 echo
