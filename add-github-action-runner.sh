@@ -109,6 +109,13 @@ spec:
       repository: "${GITHUB_REPOSITORY}"
       labels: [self-hosted, kind, arc, "${CLUSTER_NAME}"]
       serviceAccountName: gh-runner
+      resources:
+        limits:
+          cpu: "0.5"
+          memory: "2Gi"
+        requests:
+          cpu: "0.5"
+          memory: "2Gi"
 EOF
 echo
 echo
