@@ -49,30 +49,30 @@ if [ -z "$FLOWABLE_LICENSE_KEY" ]; then
     exit 1
 fi
 
-# Prompt for GITHUB_OAUTH_CLIENT_ID if in prod
+# Prompt for OAUTH_CLIENT_ID if in prod
 if [ "$NAMESPACE" == "stg" ] || [ "$NAMESPACE" == "prod" ]; then
-  if [ -n "$GITHUB_OAUTH_CLIENT_ID" ]; then
-      read -rp "GitHub OAuth2 Client ID [$GITHUB_OAUTH_CLIENT_ID]: " input
-      GITHUB_OAUTH_CLIENT_ID="${input:-$GITHUB_OAUTH_CLIENT_ID}"
+  if [ -n "$OAUTH_CLIENT_ID" ]; then
+      read -rp "GitHub OAuth2 Client ID [$OAUTH_CLIENT_ID]: " input
+      OAUTH_CLIENT_ID="${input:-$OAUTH_CLIENT_ID}"
   else
       echo "Navigate to https://github.com/settings/applications/new?oauth_application[name]=flowable-stg&oauth_application[url]=https://$CODESPACE_NAME-443.app.github.dev&oauth_application[callback_url]=https://$CODESPACE_NAME-443.app.github.dev \n and create an an oauth2 client application. Enter the ID/Secret in the prompts below."
-      read -rp "GitHub Client ID: " GITHUB_OAUTH_CLIENT_ID
+      read -rp "GitHub Client ID: " OAUTH_CLIENT_ID
   fi
   
-  if [ -z "$GITHUB_OAUTH_CLIENT_ID" ]; then
-      echo "Error: GITHUB_OAUTH_CLIENT_ID is required."
+  if [ -z "$OAUTH_CLIENT_ID" ]; then
+      echo "Error: OAUTH_CLIENT_ID is required."
       exit 1
   fi
   
-  if [ -n "$GITHUB_OAUTH_CLIENT_SECRET" ]; then
+  if [ -n "$OAUTH_CLIENT_SECRET" ]; then
       read -rsp "GitHub OAuth2 Client Secret [*****]: " input
-      GITHUB_OAUTH_CLIENT_SECRET="${input:-$GITHUB_OAUTH_CLIENT_SECRET}"
+      OAUTH_CLIENT_SECRET="${input:-$OAUTH_CLIENT_SECRET}"
   else
-      read -rsp "GitHub Client Secret: " GITHUB_OAUTH_CLIENT_SECRET
+      read -rsp "GitHub Client Secret: " OAUTH_CLIENT_SECRET
   fi
   
-  if [ -z "$GITHUB_OAUTH_CLIENT_SECRET" ]; then
-      echo "Error: GITHUB_OAUTH_CLIENT_SECRET is required."
+  if [ -z "$OAUTH_CLIENT_SECRET" ]; then
+      echo "Error: OAUTH_CLIENT_SECRET is required."
       exit 1
   fi 
 
@@ -84,8 +84,8 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "FLOWABLE_REPO_PASSWORD=\"$FLOWABLE_REPO_PASSWORD\"" >> ~/secrets.txt
     echo "FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/secrets.txt
     if [ "$NAMESPACE" == "prod" ] || [ "$NAMESPACE" == "stg" ]; then
-      echo "GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/secrets.txt
-      echo "GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/secrets.txt
+      echo "OAUTH_CLIENT_ID=\"$OAUTH_CLIENT_ID\"" >> ~/secrets.txt
+      echo "OAUTH_CLIENT_SECRET=\"$OAUTH_CLIENT_SECRET\"" >> ~/secrets.txt
     fi 
     
     echo
@@ -115,8 +115,8 @@ if [ -n "$CODESPACE_NAME" ]; then
     echo "export FLOWABLE_LICENSE_PATH=\"$FLOWABLE_LICENSE_PATH\"" >> ~/.bashrc
     echo "export FLOWABLE_LICENSE_KEY=\"$FLOWABLE_LICENSE_KEY\"" >> ~/.bashrc
     if [ "$NAMESPACE" == "prod" ] || [ "$NAMESPACE" == "stg" ]; then
-      echo "export GITHUB_OAUTH_CLIENT_ID=\"$GITHUB_OAUTH_CLIENT_ID\"" >> ~/.bashrc
-      echo "export GITHUB_OAUTH_CLIENT_SECRET=\"$GITHUB_OAUTH_CLIENT_SECRET\"" >> ~/.bashrc
+      echo "export OAUTH_CLIENT_ID=\"$OAUTH_CLIENT_ID\"" >> ~/.bashrc
+      echo "export OAUTH_CLIENT_SECRET=\"$OAUTH_CLIENT_SECRET\"" >> ~/.bashrc
     fi 
     
     source ~/.bashrc

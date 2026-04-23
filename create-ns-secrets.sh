@@ -60,12 +60,12 @@ if [ -z "$FLOWABLE_REPO_PASSWORD" ]; then
 fi
 
 if [ -z "$GITHUB_OAUTH_CLIENT_ID" ] && [[ "$DEPLOYMENT_NAMESPACE" == "stg" || "$DEPLOYMENT_NAMESPACE" == "prod" ]]; then
-  echo "must have GITHUB_OAUTH_CLIENT_ID env variable set for secret creation"
+  echo "must have OAUTH_CLIENT_ID env variable set for secret creation"
   exit 1
 fi
 
-if [ -z "$GITHUB_OAUTH_CLIENT_SECRET" ] && [[ "$DEPLOYMENT_NAMESPACE" == "stg" || "$DEPLOYMENT_NAMESPACE" == "prod" ]]; then
-  echo "must have GITHUB_OAUTH_CLIENT_ID env variable set for secret creation"
+if [ -z "$OAUTH_CLIENT_SECRET" ] && [[ "$DEPLOYMENT_NAMESPACE" == "stg" || "$DEPLOYMENT_NAMESPACE" == "prod" ]]; then
+  echo "must have OAUTH_CLIENT_ID env variable set for secret creation"
   exit 1
 fi
 
@@ -87,7 +87,7 @@ kubectl create secret generic "$RELEASE_NAME-flowable-license" \
 
 if [[ "$DEPLOYMENT_NAMESPACE" == "stg" || "$DEPLOYMENT_NAMESPACE" == "prod" ]]; then
   kubectl create secret generic "$RELEASE_NAME-github-oauth" \
-    --from-literal=clientId="$GITHUB_OAUTH_CLIENT_ID" \
-    --from-literal=clientSecret="$GITHUB_OAUTH_CLIENT_SECRET" \
+    --from-literal=clientId="$OAUTH_CLIENT_ID" \
+    --from-literal=clientSecret="$OAUTH_CLIENT_SECRET" \
     --namespace $DEPLOYMENT_NAMESPACE
 fi
