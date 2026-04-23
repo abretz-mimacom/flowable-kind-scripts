@@ -13,7 +13,9 @@ helm upgrade --install \
   --version v1.18.2 \
   --namespace cert-manager \
   --create-namespace \
-  --set crds.enabled=true
+  --set crds.enabled=true \
+  --set resources.limits.cpu="500m" \
+  --set resources.limits.memory="512Mi"
 
 # Wait for cert-manager (optional but wise)
 kubectl -n cert-manager rollout status deploy/cert-manager --timeout=120s
